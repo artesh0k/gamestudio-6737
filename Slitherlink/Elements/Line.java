@@ -15,4 +15,8 @@ public class Line extends Element{
     public void setBeing(boolean being) {
         this.being = being;
     }
+
+    public boolean isBeing() {
+        return being;
+    }
 }

@@ -1,9 +1,6 @@
 package Slitherlink;
 
-import Slitherlink.Elements.Clue;
-import Slitherlink.Elements.Dot;
-import Slitherlink.Elements.Element;
-import Slitherlink.Elements.Line;
+import Slitherlink.Elements.*;
 
 public class Field {
     private final int rowCount;
@@ -20,6 +17,11 @@ public class Field {
     }
 
     private void generate() {
+        simpleGeneration();
+        // generation of a loop...
+        loopGeneration();
+    }
+    private void simpleGeneration(){
         for(int row = 0; row < rowCount; row += 2){
             for(int column = 0; column < columnCount; column += 2){
                 elements[row][column] = new Dot();
@@ -33,13 +35,57 @@ public class Field {
         for(int row = 1; row < rowCount; row += 2){
             for(int column = 0; column < columnCount; column += 2){
                 elements[row][column] = new Line();
+                ((Line) elements[row][column]).setBeing(false);
+                ((Line) elements[row][column]).setLineState(LineState.EMPTY);
+                elements[column][row] = new Line();
+                ((Line) elements[column][row]).setBeing(false);
+                ((Line) elements[column][row]).setLineState(LineState.EMPTY);
             }
         }
-        for(int row = 0; row < rowCount; row += 2){
-            for(int column = 1; column < columnCount; column += 2){
-                elements[row][column] = new Line();
+    }
+
+    private void loopGeneration(){
+        ((Line) elements[3][0]).setBeing(true);
+        ((Line) elements[3][4]).setBeing(true);
+        ((Line) elements[3][8]).setBeing(true);
+    }
+
+    public void drawLine(int row, int column){
+        if(elements[row][column] instanceof Line){
+            if(((Line) elements[row][column]).getLineState() == LineState.DRAWN){
+                ((Line) elements[row][column]).setLineState(LineState.EMPTY);
+            }
+            else{
+                ((Line) elements[row][column]).setLineState(LineState.DRAWN);
             }
         }
+    }
+
+    public void markLine(int row, int column){
+        if(elements[row][column] instanceof Line){
+            if(((Line) elements[row][column]).getLineState() == LineState.MARKED){
+                ((Line) elements[row][column]).setLineState(LineState.EMPTY);
+            }
+            else{
+                ((Line) elements[row][column]).setLineState(LineState.MARKED);
+            }
+        }
+    }
+
+    public boolean isSolved(){
+        for(int row = 1; row < rowCount; row += 2){
+            for(int column = 0; column < columnCount; column += 2){
+                if(((Line) elements[row][column]).getLineState() != LineState.DRAWN
+                        && ((Line) elements[row][column]).isBeing()){
+                    return false;
+                }
+                if(((Line) elements[column][row]).getLineState() != LineState.DRAWN
+                        && ((Line) elements[column][row]).isBeing()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public int getRowCount() {
