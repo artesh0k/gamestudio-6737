@@ -1,4 +1,4 @@
-package Slitherlink.Elements;
+package slitherlink.elements;
 
 public class Line extends Element{
     private LineState lineState;
