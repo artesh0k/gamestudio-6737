@@ -11,7 +11,7 @@ public class Field {
     private GameState fieldState;
 
     public Field(int rowCount, int columnCount) {
-        if(rowCount>9 || columnCount>9 || columnCount<2 || rowCount<2 ){throw new RuntimeException("Invalid size of field");}
+        if(rowCount>9 || columnCount>9 || columnCount<1 || rowCount<1 ){throw new RuntimeException("Invalid size of field");}
         this.rowCount = rowCount*2+1;
         this.columnCount = columnCount*2+1;
         elements = new Element[this.rowCount][this.columnCount];
