@@ -33,12 +33,14 @@ public class ConsoleUI {
         System.out.println("                                                             right ← [R] 2 [L] → left    ");
         System.out.println("                                                                      · [D] ·            ");
         System.out.println("                                                                         dawn            ");
-        while(!field.isSolved()){
+        while(!field.isSolved(field.getElements())){
             printField();
             //printUnderField();
             processInput();
         }
+        printField();
         System.out.println("game is solved");
+
     }
     private void processInput() {
         System.out.println("=========================================================================================================================================================");
@@ -88,7 +90,12 @@ public class ConsoleUI {
                 if (field.getElement(row, column) instanceof Dot) {
                     System.out.print(" · ");
                 } else if (field.getElement(row, column) instanceof Clue) {
-                    System.out.print(" " + ((Clue) field.getElement(row, column)).getValue() + " ");
+                    switch (((Clue) field.getElement(row, column)).getClueState()){
+                        case VISIBLE -> System.out.print(" " + ((Clue) field.getElement(row, column)).getValue() + " ");
+                        case HIDDEN -> System.out.print("   ");
+                    }
+
+
                 } else if (field.getElement(row, column) instanceof Line) {
                     if (((Line) field.getElement(row, column)).getLineState() == LineState.DRAWN) {
                         if (row == 0 || row == field.getRowCount() - 1) {
