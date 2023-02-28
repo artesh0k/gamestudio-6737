@@ -30,7 +30,7 @@ public class ConsoleUI {
         System.out.println("  ↓                           ↓                                       ↘      ");
         System.out.println(" to [D]raw the line          to [M]ark the line                          up              ");
         System.out.println("                                                                      · [U] ·            ");
-        System.out.println("                                                             right ← [R] 2 [L] → left    ");
+        System.out.println("                                                              left ← [L] 2 [R] → right   ");
         System.out.println("                                                                      · [D] ·            ");
         System.out.println("                                                                         dawn            ");
         while(!field.isSolved(field.getElements())){
@@ -60,12 +60,15 @@ public class ConsoleUI {
                 case 'L' -> column--;
                 case 'R' -> column++;
             }
-
-            switch(line.charAt(0)){
-                case 'D' -> field.drawLine(row, column);
-                case 'M' -> field.markLine(row, column);
+            if(column<field.getColumnCount()-1 && row<field.getRowCount()-1) {
+                switch (line.charAt(0)) {
+                    case 'D' -> field.drawLine(row, column);
+                    case 'M' -> field.markLine(row, column);
+                }
             }
-
+            else {
+                System.err.println("Wrong input " + line);
+            }
         } else {
             System.err.println("Wrong input " + line);
         }

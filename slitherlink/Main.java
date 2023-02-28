@@ -4,7 +4,7 @@ import slitherlink.consoleui.ConsoleUI;
 
 public class Main {
     public static void main(String[] args) {
-        Field pole = new Field(8, 1);
+        Field pole = new Field(3, 2);
         ConsoleUI consoleui = new ConsoleUI(pole);
         consoleui.play();
 

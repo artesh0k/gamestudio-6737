@@ -8,7 +8,7 @@ public class Field {
     private final int rowCount;
     private final int columnCount;
     private final Element[][] elements;
-    private GameState fieldState;
+    private static GameState fieldState;
 
     public Field(int rowCount, int columnCount) {
         if(rowCount>9 || columnCount>9 || columnCount<1 || rowCount<1 ){throw new RuntimeException("Invalid size of field");}
@@ -173,8 +173,7 @@ public class Field {
         return false;
     }
 
-
-    private void numbersGeneration( double percentOfClues) {
+    private void numbersGeneration(double percentOfClues) {
         for(int y = 1; y<rowCount; y+=2) {
             for (int x = 1; x < columnCount; x+=2) {
                 int value = 0;
