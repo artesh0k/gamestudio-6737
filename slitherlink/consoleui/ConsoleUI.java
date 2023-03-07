@@ -1,7 +1,7 @@
 package slitherlink.consoleui;
 
-import slitherlink.Field;
-import slitherlink.GameState;
+import slitherlink.Field.Field;
+import slitherlink.Field.GameState;
 import slitherlink.elements.Clue;
 import slitherlink.elements.Dot;
 import slitherlink.elements.Line;

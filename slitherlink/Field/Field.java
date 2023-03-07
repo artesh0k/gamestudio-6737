@@ -1,6 +1,7 @@
-package slitherlink;
+package slitherlink.Field;
 import slitherlink.elements.*;
 import java.util.Random;
+
 
 public class Field {
     private final int rowCount;
@@ -226,7 +227,7 @@ public class Field {
         }
     }
 
-    private boolean gameCanBeSolved() {
+    boolean gameCanBeSolved() {
         Element[][] check = copyElements(elements);
         Element[][] lastCheck = copyElements(check);
 
@@ -413,7 +414,7 @@ public class Field {
             for (int column = 1; column < columnCount; column += 2) {
                 if (((Clue) check[row][column]).getClueState() == ClueState.VISIBLE) {
                     if (((Clue) check[row][column]).getValue() == 3) {
-                        if (row != rowCount - 2 && ((Clue) check[row + 2][column]).getClueState() == ClueState.VISIBLE) {
+                        if (row != rowCount - 2 && ((Clue) check[row + 2][column]).getClueState() == ClueState.VISIBLE && rowCount!=5) {
                             if (((Clue) check[row + 2][column]).getValue() == 3) {
                                 ((Line) check[row - 1][column]).setLineState(LineState.DRAWN);
                                 ((Line) check[row + 1][column]).setLineState(LineState.DRAWN);
@@ -426,7 +427,7 @@ public class Field {
                                 }
                             }
                         }
-                        if (column != columnCount - 2 && ((Clue) check[row][column + 2]).getClueState() == ClueState.VISIBLE) {
+                        if (column != columnCount - 2 && ((Clue) check[row][column + 2]).getClueState() == ClueState.VISIBLE && columnCount!=5) {
                             if (((Clue) check[row][column + 2]).getValue() == 3) {
                                 ((Line) check[row][column - 1]).setLineState(LineState.DRAWN);
                                 ((Line) check[row][column + 1]).setLineState(LineState.DRAWN);
@@ -832,7 +833,7 @@ public class Field {
         }
     }
 
-    boolean isTheSameField(Element[][] check, Element[][] lastCheck) {
+    private boolean isTheSameField(Element[][] check, Element[][] lastCheck) {
         for (int row = 0; row < rowCount; row++) {
             for (int column = 0; column < columnCount; column++) {
                 if (check[row][column] instanceof Line) {
@@ -888,7 +889,11 @@ public class Field {
         }
     }
 
-    private boolean isSolved(Element[][] elements) {
+    boolean isSolved(Element[][] elements) {
+        return isLinesAroundNumbersCorrect(elements) && isLineCycle(elements);
+    }
+
+    private boolean isLinesAroundNumbersCorrect(Element[][] elements) {
         for (int y = 1; y < rowCount; y += 2) {
             for (int x = 1; x < columnCount; x += 2) {
                 int value = 0;
@@ -912,6 +917,33 @@ public class Field {
         return true;
     }
 
+    private boolean isLineCycle(Element[][] elements) {
+        for (int row = 0; row < rowCount; row += 2) {
+            for (int column = 0; column < columnCount; column += 2) {
+                if (elements[row][column] instanceof Dot) {
+                    int countOfLines = 0;
+                    if (row != 0 && ((Line) elements[row-1][column]).getLineState() == LineState.DRAWN) {
+                        countOfLines++;
+                    }
+                    if (column != 0 && ((Line) elements[row][column-1]).getLineState() == LineState.DRAWN) {
+                        countOfLines++;
+                    }
+                    if (row != rowCount - 1 && ((Line) elements[row+1][column]).getLineState() == LineState.DRAWN) {
+                        countOfLines++;
+                    }
+                    if (column != columnCount - 1 && ((Line) elements[row][column+1]).getLineState() == LineState.DRAWN) {
+                        countOfLines++;
+                    }
+
+                    if(!(countOfLines == 0 || countOfLines == 2)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public int getRowCount() {
         //-> this.rowCount = rowCount*2+1;
         return rowCount;
@@ -926,7 +958,7 @@ public class Field {
         return elements[row][column];
     }
 
-    public Element[][] getElements() {
+    Element[][] getElements() {
         return elements;
     }
 
