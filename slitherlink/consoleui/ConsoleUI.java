@@ -16,8 +16,8 @@ public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
     private static Field field;
 
-    public ConsoleUI(Field field) {
-        this.field = field;
+    public ConsoleUI(Field pole) {
+        field = pole;
     }
 
     public void play() {
