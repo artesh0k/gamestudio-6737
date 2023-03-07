@@ -1,4 +1,4 @@
-package slitherlink.Field;
+package slitherlink.field;
 import slitherlink.elements.*;
 import java.util.Random;
 

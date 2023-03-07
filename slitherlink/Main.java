@@ -1,6 +1,6 @@
 package slitherlink;
 
-import slitherlink.Field.Field;
+import slitherlink.field.Field;
 import slitherlink.consoleui.ConsoleUI;
 
 public class Main {

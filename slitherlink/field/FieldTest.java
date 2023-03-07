@@ -1,4 +1,4 @@
-package slitherlink.Field;
+package slitherlink.field;
 
 import org.junit.jupiter.api.Test;
 import slitherlink.elements.*;
