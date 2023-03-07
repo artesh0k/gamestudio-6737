@@ -1,6 +1,7 @@
 package slitherlink.consoleui;
 
 import slitherlink.Field;
+import slitherlink.GameState;
 import slitherlink.elements.Clue;
 import slitherlink.elements.Dot;
 import slitherlink.elements.Line;
@@ -20,9 +21,22 @@ public class ConsoleUI {
     }
 
     public void play() {
+        printRules();
+        while (field.getFieldState() == GameState.PLAYING) {
+            printField();
+            processInput();
+        }
+        if(field.getFieldState() == GameState.SOLVED) {
+            printField();
+            System.out.println("game is solved");
+        }
+    }
+
+    private static void printRules() {
         System.out.println("The rules:");
-        System.out.println("1) X - exit");
-        System.out.println("2) correct input for the game: 'DF9U'");
+        System.out.println("1) X - to exit");
+        System.out.println("2) S - to show the solution");
+        System.out.println("3) correct input for the game: 'DF9U'");
         System.out.println();
         System.out.println("     coordinates of the tile");
         System.out.println("     ↑↑");
@@ -33,15 +47,8 @@ public class ConsoleUI {
         System.out.println("                                                              left ← [L] 2 [R] → right   ");
         System.out.println("                                                                      · [D] ·            ");
         System.out.println("                                                                         dawn            ");
-        while(!field.isSolved(field.getElements())){
-            printField();
-            //printUnderField();
-            processInput();
-        }
-        printField();
-        System.out.println("game is solved");
-
     }
+
     private void processInput() {
         System.out.println("=========================================================================================================================================================");
         System.out.println("Enter command (X - exit, DB2D - to  drawn the dawn line, MD3R - to mark the right line, DD4L - to drawn the left line, to do line empty use the same function(D or M)): ");
@@ -49,24 +56,27 @@ public class ConsoleUI {
         if ("X".equals(line)) {
             System.exit(0);
         }
+        if("S".equals(line)){
+            printSolvedField();
+            System.exit(0);
+        }
 
         Matcher matcher = COMMAND_PATTERN.matcher(line);
         if (matcher.matches()) {
             int row = (line.charAt(1) - 'A') * 2 + 1;
-            int column = (Integer.parseInt(matcher.group(3))-1) * 2 + 1;
-            switch (line.charAt(3)) {
-                case 'U' -> row--;
-                case 'D' -> row++;
-                case 'L' -> column--;
-                case 'R' -> column++;
-            }
-            if(column<field.getColumnCount()-1 && row<field.getRowCount()-1) {
+            int column = (Integer.parseInt(matcher.group(3)) - 1) * 2 + 1;
+            if (column < field.getColumnCount() && row < field.getRowCount()) {
+                switch (line.charAt(3)) {
+                    case 'U' -> row--;
+                    case 'D' -> row++;
+                    case 'L' -> column--;
+                    case 'R' -> column++;
+                }
                 switch (line.charAt(0)) {
                     case 'D' -> field.drawLine(row, column);
                     case 'M' -> field.markLine(row, column);
                 }
-            }
-            else {
+            } else {
                 System.err.println("Wrong input " + line);
             }
         } else {
@@ -75,77 +85,97 @@ public class ConsoleUI {
     }
 
     public static void printField() {
-        System.out.print("       ");
-        for(int column = 1 ; column <= (field.getColumnCount()-1)/2; column++){
-            System.out.print(column+"     ");
-        }
-        System.out.println();
-        System.out.println();
+
+        printColumnsNumbers();
+
         for (int row = 0; row < field.getRowCount(); row++) {
-            int letter=row/2;
-            if(row%2!=0){
-                System.out.print((char) ('A' + letter)+"  ");
-            }
-            else{
-                System.out.print("   ");
-            }
+            printRowsLetters(row);
             for (int column = 0; column < field.getColumnCount(); column++) {
                 if (field.getElement(row, column) instanceof Dot) {
                     System.out.print(" · ");
-                } else if (field.getElement(row, column) instanceof Clue) {
-                    switch (((Clue) field.getElement(row, column)).getClueState()){
-                        case VISIBLE -> System.out.print(" " + ((Clue) field.getElement(row, column)).getValue() + " ");
-                        case HIDDEN -> System.out.print("   ");
-                    }
 
+                } else if (field.getElement(row, column) instanceof Clue) {
+                    printClue(row, column);
 
                 } else if (field.getElement(row, column) instanceof Line) {
-                    if (((Line) field.getElement(row, column)).getLineState() == LineState.DRAWN) {
-                        if (row == 0 || row == field.getRowCount() - 1) {
-                            System.out.print(" — ");
-                        } else if (column == 0 || column == field.getColumnCount() - 1) {
-                            System.out.print(" | ");
-                        } else if (column % 2 != 0) {
-                            System.out.print(" — ");
-                        } else {
-                            System.out.print(" | ");
-                        }
-                    } else if (((Line) field.getElement(row, column)).getLineState() == LineState.MARKED) {
-                        System.out.print(" x ");
-                    } else {
-                        System.out.print("   ");
-                    }
+                    printLine(row, column);
                 }
             }
             System.out.println();
         }
     }
 
-    public static void printUnderField() {
+    private static void printRowsLetters(int row) {
+        int letter = row / 2;
+        if (row % 2 != 0) {
+            System.out.print((char) ('A' + letter) + "  ");
+        } else {
+            System.out.print("   ");
+        }
+    }
+
+    private static void printColumnsNumbers() {
+        System.out.print("       ");
+        for (int column = 1; column <= (field.getColumnCount() - 1) / 2; column++) {
+            System.out.print(column + "     ");
+        }
+
+        System.out.println();
+        System.out.println();
+    }
+
+    private static void printClue(int row, int column) {
+        switch (((Clue) field.getElement(row, column)).getClueState()) {
+            case VISIBLE -> System.out.print(" " + ((Clue) field.getElement(row, column)).getValue() + " ");
+            case HIDDEN -> System.out.print("   ");
+        }
+    }
+    private static void printLine(int row, int column) {
+        if (((Line) field.getElement(row, column)).getLineState() == LineState.DRAWN) {
+            if (row == 0 || row == field.getRowCount() - 1) {
+                System.out.print(" — ");
+            } else if (column == 0 || column == field.getColumnCount() - 1) {
+                System.out.print(" | ");
+            } else if (column % 2 != 0) {
+                System.out.print(" — ");
+            } else {
+                System.out.print(" | ");
+            }
+        } else if (((Line) field.getElement(row, column)).getLineState() == LineState.MARKED) {
+            System.out.print(" x ");
+        } else {
+            System.out.print("   ");
+        }
+    }
+
+    public void printSolvedField() {
+        printColumnsNumbers();
         for (int row = 0; row < field.getRowCount(); row++) {
+            printRowsLetters(row);
             for (int column = 0; column < field.getColumnCount(); column++) {
                 if (field.getElement(row, column) instanceof Dot) {
                     System.out.print(" · ");
                 } else if (field.getElement(row, column) instanceof Clue) {
-                    //System.out.print(" N ");
-                    System.out.print(" " + ((Clue) field.getElement(row, column)).getValue() + " ");
+                    printClue(row, column);
                 } else if (field.getElement(row, column) instanceof Line) {
-                    if ((row == 0 || row == field.getRowCount() - 1) && ((Line) field.getElement(row, column)).isBeing()) {
-                        System.out.print(" — ");
-                    } else if ((column == 0 || column == field.getColumnCount() - 1) && ((Line) field.getElement(row, column)).isBeing()) {
-                        System.out.print(" | ");
-                    } else if (((Line) field.getElement(row, column)).isBeing() && column % 2 != 0) {
-                        System.out.print(" — ");
-                    } else if (((Line) field.getElement(row, column)).isBeing() && column % 2 == 0) {
-                        System.out.print(" | ");
-                    } else {
-                        System.out.print("   ");
-                    }
-                } else {
-                    System.out.print(field.getElement(row, column));
+                    printSolvedLine(row, column);
                 }
             }
             System.out.println();
+        }
+    }
+
+    private static void printSolvedLine(int row, int column) {
+        if ((row == 0 || row == field.getRowCount() - 1) && ((Line) field.getElement(row, column)).isBeing()) {
+            System.out.print(" — ");
+        } else if ((column == 0 || column == field.getColumnCount() - 1) && ((Line) field.getElement(row, column)).isBeing()) {
+            System.out.print(" | ");
+        } else if (((Line) field.getElement(row, column)).isBeing() && column % 2 != 0) {
+            System.out.print(" — ");
+        } else if (((Line) field.getElement(row, column)).isBeing() && column % 2 == 0) {
+            System.out.print(" | ");
+        } else {
+            System.out.print("   ");
         }
     }
 }

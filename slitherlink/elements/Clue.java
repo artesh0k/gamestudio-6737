@@ -1,6 +1,6 @@
 package slitherlink.elements;
 
-public class Clue extends Element{
+public class Clue extends Element {
     private int value;
     private ClueState clueState;
 

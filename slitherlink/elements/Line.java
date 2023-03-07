@@ -1,6 +1,6 @@
 package slitherlink.elements;
 
-public class Line extends Element{
+public class Line extends Element {
     private LineState lineState;
     private boolean being;
 

@@ -1,4 +1,4 @@
 package slitherlink.elements;
 
-public class Dot extends Element{
+public class Dot extends Element {
 }
