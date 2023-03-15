@@ -1,5 +1,6 @@
-package sk.tuke.gamestudio.game.slitherlink.field;
-import sk.tuke.gamestudio.game.slitherlink.elements.*;
+package sk.tuke.gamestudio.game.slitherlink.core.field;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.*;
+
 import java.util.Random;
 
 
@@ -967,8 +968,8 @@ public class Field {
     public GameState getFieldState() {
         return fieldState;
     }
-
-    /*private void printLoop(int[][] loop, int rowCountOpt, int columnCountOpt) {
+/*
+    private void printLoop(int[][] loop, int rowCountOpt, int columnCountOpt) {
         for (int y = 0; y < rowCountOpt; y++) {
             for (int x = 0; x < columnCountOpt; x++) {
                 System.out.print(loop[y][x] + " ");
@@ -977,7 +978,8 @@ public class Field {
         }
     }
 */
-    /*private void printGameSolver(Element[][] elements) {
+/*
+    private void printGameSolver(Element[][] elements) {
         System.out.print("       ");
         for (int column = 1; column <= (columnCount - 1) / 2; column++) {
             System.out.print(column + "     ");

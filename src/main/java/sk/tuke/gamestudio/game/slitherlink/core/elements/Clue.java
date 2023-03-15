@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.game.slitherlink.elements;
+package sk.tuke.gamestudio.game.slitherlink.core.elements;
 
 public class Clue extends Element {
     private int value;

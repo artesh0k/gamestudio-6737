@@ -27,7 +27,7 @@ public class ScoreServiceJDBS implements ScoreService{
             statement.setTimestamp(4, new Timestamp(score.getPlayedAt().getTime()));
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new GameStudioException("Problem deleting score", e);
+            throw new GameStudioException("Problem adding score", e);
         }
     }
 
@@ -47,7 +47,7 @@ public class ScoreServiceJDBS implements ScoreService{
             }
 
         } catch (SQLException e) {
-        throw new GameStudioException("Problem deleting score", e);
+        throw new GameStudioException("Problem getting scores", e);
         }
     }
 

@@ -1,7 +1,8 @@
-package sk.tuke.gamestudio.game.slitherlink.field;
+package sk.tuke.gamestudio.game.slitherlink.core.field;
 
 import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.game.slitherlink.elements.*;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.*;
+
 
 import java.util.Random;
 

@@ -1,15 +1,14 @@
 package sk.tuke.gamestudio.game.slitherlink.consoleui;
 
-import com.sun.source.doctree.SystemPropertyTree;
-import sk.tuke.gamestudio.game.slitherlink.elements.Clue;
-import sk.tuke.gamestudio.game.slitherlink.elements.Line;
-import sk.tuke.gamestudio.game.slitherlink.elements.LineState;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.Clue;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.Line;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.LineState;
+import sk.tuke.gamestudio.game.slitherlink.entity.Comment;
 import sk.tuke.gamestudio.game.slitherlink.entity.Score;
-import sk.tuke.gamestudio.game.slitherlink.field.Field;
-import sk.tuke.gamestudio.game.slitherlink.field.GameState;
-import sk.tuke.gamestudio.game.slitherlink.elements.Dot;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreService;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreServiceJDBS;
+import sk.tuke.gamestudio.game.slitherlink.core.field.Field;
+import sk.tuke.gamestudio.game.slitherlink.core.field.GameState;
+import sk.tuke.gamestudio.game.slitherlink.core.elements.Dot;
+import sk.tuke.gamestudio.game.slitherlink.service.*;
 
 import java.util.Date;
 import java.util.List;
@@ -24,12 +23,16 @@ public class ConsoleUI {
     private static Field field;
 
     private ScoreService scoreService = new ScoreServiceJDBS();
+    private CommentService commentService = new CommentServiceJDBS();
+    private RatingService ratingService = new RatingServiceJDBS();
     public ConsoleUI(Field pole) {
         field = pole;
     }
 
     public void play() {
         printTopScores();
+        printLastComments();
+        printRating();
         printRules();
         while (field.getFieldState() == GameState.PLAYING) {
             printField();
@@ -195,6 +198,17 @@ public class ConsoleUI {
         for(Score score : scores) {
             System.out.printf("%s %d\n", score.getPlayer(), score.getPoints());
         }
+        System.out.println("-------------------------------------------------");
+    }
+    private void printLastComments() {
+        List<Comment> comments = commentService.getComments(GAME_NAME);
+        for(Comment comment : comments) {
+            System.out.printf("%s %s\n", comment.getPlayer(), comment.getComment());
+        }
+        System.out.println("-------------------------------------------------");
+    }
+    private void printRating(){
+        System.out.printf("%f\n",ratingService.getRating("slitherlink"));
         System.out.println("-------------------------------------------------");
     }
 
