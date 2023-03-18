@@ -17,14 +17,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConsoleUI {
-    public static final String GAME_NAME = "slitherlink";
+    private static final String GAME_NAME = "slitherlink";
     private static final Pattern COMMAND_PATTERN = Pattern.compile("([DM])([A-J])([1-9])([UDRL])");
     private final Scanner scanner = new Scanner(System.in);
     private static Field field;
 
-    private ScoreService scoreService = new ScoreServiceJDBS();
-    private CommentService commentService = new CommentServiceJDBS();
-    private RatingService ratingService = new RatingServiceJDBS();
+    private final ScoreService scoreService = new ScoreServiceJDBS();
+    private final CommentService commentService = new CommentServiceJDBS();
+    private final RatingService ratingService = new RatingServiceJDBS();
     public ConsoleUI(Field pole) {
         field = pole;
     }
@@ -97,7 +97,7 @@ public class ConsoleUI {
         }
     }
 
-    public static void printField() {
+    private static void printField() {
 
         printColumnsNumbers();
 
@@ -161,7 +161,7 @@ public class ConsoleUI {
         }
     }
 
-    public void printSolvedField() {
+    private void printSolvedField() {
         printColumnsNumbers();
         for (int row = 0; row < field.getRowCount(); row++) {
             printRowsLetters(row);

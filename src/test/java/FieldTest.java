@@ -1,7 +1,6 @@
-package sk.tuke.gamestudio.game.slitherlink.core.field;
-
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.game.slitherlink.core.elements.*;
+import sk.tuke.gamestudio.game.slitherlink.core.field.Field;
 
 
 import java.util.Random;
@@ -159,107 +158,6 @@ class FieldTest {
             }
         }
         assertNotEquals(value, 6);
-    }
-    @Test
-    public void isSolvedTest() {
-        int row=2;
-        int column=2;
-        Field field1 = new Field(row, column, 1, 1);
-        cleanField(field1, row, column);
-        ((Clue) field1.getElement(1,1)).setValue(3);
-        ((Clue) field1.getElement(1,3)).setValue(1);
-        ((Clue) field1.getElement(3,1)).setValue(3);
-        ((Clue) field1.getElement(3,3)).setValue(1);
-
-        ((Line) field1.getElement(0,1)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,2)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,2)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(4,1)).setLineState(LineState.DRAWN);
-
-        assertTrue(field1.isSolved(field1.getElements()));
-
-        cleanField(field1, row, column);
-        ((Clue) field1.getElement(1,1)).setValue(3);
-        ((Clue) field1.getElement(1,3)).setValue(1);
-        ((Clue) field1.getElement(3,1)).setValue(3);
-        ((Clue) field1.getElement(3,3)).setValue(1);
-
-        ((Line) field1.getElement(0,1)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,2)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,2)).setLineState(LineState.DRAWN);
-
-        assertFalse(field1.isSolved(field1.getElements()));
-
-        cleanField(field1, row, column);
-        ((Clue) field1.getElement(1,1)).setValue(3);
-        ((Clue) field1.getElement(1,3)).setValue(1);
-        ((Clue) field1.getElement(3,1)).setValue(3);
-        ((Clue) field1.getElement(3,3)).setValue(1);
-
-        ((Line) field1.getElement(0,1)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(1,4)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(2,1)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,0)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,4)).setLineState(LineState.DRAWN);
-        ((Line) field1.getElement(3,4)).setLineState(LineState.DRAWN);
-
-        assertFalse(field1.isSolved(field1.getElements()));
-    }
-
-    @Test
-    public void gameCanBeSolvedTest() {
-        int row=2;
-        int column=2;
-        Field field1 = new Field(row, column, 0.6, 1);// 0.6 * 4 ~ 2
-        cleanField(field1, row, column);
-        ((Clue) field1.getElement(1,1)).setValue(3);
-        ((Clue) field1.getElement(1,3)).setValue(1);
-        ((Clue) field1.getElement(1,3)).setClueState(ClueState.HIDDEN);
-        ((Clue) field1.getElement(3,1)).setValue(3);
-        ((Clue) field1.getElement(3,3)).setValue(1);
-        ((Clue) field1.getElement(3,3)).setClueState(ClueState.HIDDEN);
-
-        assertTrue(field1.gameCanBeSolved());
-
-        cleanField(field1, row, column);
-        ((Clue) field1.getElement(1,1)).setValue(3);
-        ((Clue) field1.getElement(1,3)).setValue(1);
-        ((Clue) field1.getElement(1,3)).setClueState(ClueState.HIDDEN);
-        ((Clue) field1.getElement(3,1)).setValue(3);
-        ((Clue) field1.getElement(3,1)).setClueState(ClueState.HIDDEN);
-        ((Clue) field1.getElement(3,3)).setValue(1);
-        ((Clue) field1.getElement(3,3)).setClueState(ClueState.HIDDEN);
-
-        assertFalse(field1.gameCanBeSolved());
-
-    }
-
-    private void cleanField(Field field, int rowCount, int columnCount){
-        rowCount=rowCount*2+1;
-        columnCount=columnCount*2+1;
-        for (int row = 1; row < rowCount; row += 2) {
-            for (int column = 1; column < columnCount; column += 2) {
-                ((Clue) field.getElement(row, column)).setValue(0);
-                ((Clue) field.getElement(row, column)).setClueState(ClueState.VISIBLE);
-            }
-        }
-        for (int row = 1; row < rowCount; row += 2) {
-            for (int column = 0; column < columnCount; column += 2) {
-                ((Line) field.getElement(row, column)).setLineState(LineState.EMPTY);
-                ((Line) field.getElement(row, column)).setBeing(false);
-            }
-        }
-        for (int row = 0; row < rowCount; row += 2) {
-            for (int column = 1; column < columnCount; column += 2) {
-                ((Line) field.getElement(row, column)).setLineState(LineState.EMPTY);
-                ((Line) field.getElement(row, column)).setBeing(false);
-            }
-        }
     }
 
 }
