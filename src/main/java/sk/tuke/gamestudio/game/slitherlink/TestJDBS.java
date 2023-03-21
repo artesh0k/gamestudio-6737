@@ -14,17 +14,18 @@ public class TestJDBS {
     public static void main(String[] args) throws Exception{
 
 
-      /*ScoreService service = new ScoreServiceJDBS();
+      ScoreService service = new ScoreServiceJDBS();
       service.reset();
       service.addScore(new Score("julia", "slitherlink", 200, new Date()));
       service.addScore(new Score("tanya", "slitherlink", 100, new Date()));
       service.addScore(new Score("sonya", "slitherlink", 130, new Date()));
       service.addScore(new Score("sveta", "slitherlink", 101, new Date()));
-      System.out.println(service.getTopScores("slitherlink"));*/
-        /*CommentService commentService = new CommentServiceJDBS();
+      System.out.println(service.getTopScores("slitherlink"));
+        CommentService commentService = new CommentServiceJDBS();
         commentService.reset();
         commentService.addComment(new Comment("valerii", "slitherlink", "hello??", new Date()));
-        System.out.println(commentService.getComments("slitherlink"));*/
+        commentService.addComment(new Comment("lol", "slitherlink", "i am the first?", new Date()));
+        System.out.println(commentService.getComments("slitherlink"));
         RatingService ratingService = new RatingServiceJDBS();
         ratingService.reset();
         ratingService.addVote(new Rating("valerii","slitherlink", 10, new Date()));
