@@ -1,10 +1,7 @@
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.game.slitherlink.entity.Comment;
-import sk.tuke.gamestudio.game.slitherlink.entity.Score;
 import sk.tuke.gamestudio.game.slitherlink.service.CommentService;
 import sk.tuke.gamestudio.game.slitherlink.service.CommentServiceJDBS;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreService;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreServiceJDBS;
 
 import java.util.Date;
 
@@ -31,7 +28,8 @@ public class CommentServiceTest {
         assertEquals("slitherlink", comments.get(0).getGame());
         assertEquals("Jaro", comments.get(0).getPlayer());
         assertEquals("hi", comments.get(0).getComment());
-        assertEquals(date, comments.get(0).getCommentedAt());
+        assertEquals(date, comments.get(0).getCommentedOn());
+        commentService.reset();
     }
 
     @Test
@@ -50,21 +48,21 @@ public class CommentServiceTest {
         var comments = commentService.getComments("slitherlink");
 
         assertEquals(3, comments.size());
-        System.out.println(comments.toString());
         assertEquals("slitherlink", comments.get(0).getGame());
         assertEquals("Jung-kook", comments.get(0).getPlayer());
         assertEquals("loong-time no see", comments.get(0).getComment());
-        assertEquals(date4, comments.get(0).getCommentedAt());
+        assertEquals(date4, comments.get(0).getCommentedOn());
 
         assertEquals("slitherlink", comments.get(1).getGame());
         assertEquals("Katka", comments.get(1).getPlayer());
         assertEquals("hello", comments.get(1).getComment());
-        assertEquals(date2, comments.get(1).getCommentedAt());
+        assertEquals(date2, comments.get(1).getCommentedOn());
 
         assertEquals("slitherlink", comments.get(2).getGame());
         assertEquals("Jaro", comments.get(2).getPlayer());
         assertEquals("hi", comments.get(2).getComment());
-        assertEquals(date1, comments.get(2).getCommentedAt());
+        assertEquals(date1, comments.get(2).getCommentedOn());
+        commentService.reset();
     }
 
 }

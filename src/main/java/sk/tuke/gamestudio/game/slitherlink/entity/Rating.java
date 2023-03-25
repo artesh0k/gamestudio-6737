@@ -8,15 +8,15 @@ public class Rating {
 
     private String game;
 
-    private int vote;
+    private int rating;
 
-    private Date votedAt;
+    private Date ratedOn;
 
-    public Rating(String player, String game, int vote, Date votedAt) {
+    public Rating(String player, String game, int rating, Date ratedOn) {
         this.player = player;
         this.game = game;
-        this.vote = vote;
-        this.votedAt = votedAt;
+        this.rating = rating;
+        this.ratedOn = ratedOn;
     }
 
     public String getPlayer() {
@@ -35,20 +35,20 @@ public class Rating {
         this.game = game;
     }
 
-    public int getVote() {
-        return vote;
+    public int getRating() {
+        return rating;
     }
 
-    public void setVote(int vote) {
-        this.vote = vote;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
-    public Date getVotedAt() {
-        return votedAt;
+    public Date getRatedOn() {
+        return ratedOn;
     }
 
-    public void setVotedAt(Date votedAt) {
-        this.votedAt = votedAt;
+    public void setRatedOn(Date ratedOn) {
+        this.ratedOn = ratedOn;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class Rating {
         return "Rating{" +
                 "player='" + player + '\'' +
                 ", game='" + game + '\'' +
-                ", vote=" + vote +
-                ", votedAt=" + votedAt +
+                ", rating=" + rating +
+                ", ratedOn=" + ratedOn +
                 '}';
     }
 }

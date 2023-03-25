@@ -12,6 +12,7 @@ public class Field {
     private final Element[][] elements;
     private GameState fieldState;
     private final GameSolver gameSolver;
+    private final long startMillis;
 
     public Field(int rowCount, int columnCount, double percentSizeOfLoop, double percentWithoutClues) {
         if (rowCount > 9 || columnCount > 9 || columnCount < 1 || rowCount < 1) {
@@ -31,6 +32,7 @@ public class Field {
         fieldState = GameState.PLAYING;
         gameSolver = new GameSolver(this.rowCount, this.columnCount, this.percentSizeOfLoop);
         generate();
+        startMillis = System.currentTimeMillis();
     }
 
     private void generate() {
@@ -73,7 +75,8 @@ public class Field {
         int[][] loop = new int[rowCountOpt][columnCountOpt];
 
         int counter = (int) Math.round(rowCountOpt * columnCountOpt * percentSizeOfLoop);
-        if ((rowCount - 1) / 2 == 2 && (columnCount - 1) / 2 == 2 && counter == 3) {
+
+        if ((rowCount - 1) / 2 == 2 && (columnCount - 1) / 2 == 2 && counter >=3 ) {
             //impossible case
             counter=2;
         }
@@ -100,8 +103,6 @@ public class Field {
                 }
             }
         }
-
-        //printLoop(loop, rowCountOpt, columnCountOpt);
 
         for (int y = 0; y < rowCountOpt; y++) {
             for (int x = 0; x < columnCountOpt; x++) {
@@ -272,6 +273,15 @@ public class Field {
 
     public GameState getFieldState() {
         return fieldState;
+    }
+
+    public int getScore() {
+        int score = (int) (rowCount * columnCount - (System.currentTimeMillis() - startMillis) / 1000);
+        if(fieldState == GameState.SOLVED && score > 0){
+            return score;
+        } else {
+            return 0;
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import sk.tuke.gamestudio.game.slitherlink.core.elements.Clue;
 import sk.tuke.gamestudio.game.slitherlink.core.elements.Line;
 import sk.tuke.gamestudio.game.slitherlink.core.elements.LineState;
 import sk.tuke.gamestudio.game.slitherlink.entity.Comment;
+import sk.tuke.gamestudio.game.slitherlink.entity.Rating;
 import sk.tuke.gamestudio.game.slitherlink.entity.Score;
 import sk.tuke.gamestudio.game.slitherlink.core.field.Field;
 import sk.tuke.gamestudio.game.slitherlink.core.field.GameState;
@@ -41,8 +42,10 @@ public class ConsoleUI {
         if(field.getFieldState() == GameState.SOLVED) {
             printField();
             System.out.println("game is solved");
-            scoreService.addScore(new Score(System.getProperty("user.name"), "slitherlink", 1100, new Date()));
+            scoreService.addScore(new Score(System.getProperty("user.name"), "slitherlink", field.getScore(), new Date()));
         }
+        addRating();
+        writeComment();
     }
 
     private static void printRules() {
@@ -71,6 +74,8 @@ public class ConsoleUI {
         }
         if("S".equals(line)){
             printSolvedField();
+            addRating();
+            writeComment();
             System.exit(0);
         }
 
@@ -208,8 +213,26 @@ public class ConsoleUI {
         System.out.println("-------------------------------------------------");
     }
     private void printRating(){
-        System.out.printf("%f\n",ratingService.getRating("slitherlink"));
+        System.out.printf("%d\n",ratingService.getAvarageRating("slitherlink"));
         System.out.println("-------------------------------------------------");
     }
 
+    private void addRating(){
+        System.out.println("Please rate our game 1-5");
+        String line = scanner.nextLine();
+        Pattern COMMAND_PATTERN = Pattern.compile("([1-5])");
+        Matcher matcher = COMMAND_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            ratingService.setRating(new Rating(System.getProperty("user.name"), "slitherlink", line.charAt(0), new Date()));
+        } else {
+            System.err.println("Wrong input " + line);
+        }
+
+    }
+
+    private void writeComment(){
+        System.out.println("Please write comment");
+        String line = scanner.nextLine();
+        commentService.addComment(new Comment(System.getProperty("user.name"),"slitherlink", line, new Date()));
+    }
 }

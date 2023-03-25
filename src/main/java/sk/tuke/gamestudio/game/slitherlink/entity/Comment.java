@@ -3,19 +3,20 @@ package sk.tuke.gamestudio.game.slitherlink.entity;
 import java.util.Date;
 
 public class Comment {
+
     private String player;
 
     private String game;
 
-    private String content;
+    private String comment;
 
-    private Date commentedAt;
+    private Date commentedOn;
 
-    public Comment(String player, String game, String comment, Date commentedAt) {
+    public Comment(String player, String game, String comment, Date commentedOn) {
         this.player = player;
         this.game = game;
-        this.content = comment;
-        this.commentedAt = commentedAt;
+        this.comment = comment;
+        this.commentedOn = commentedOn;
     }
 
     public String getPlayer() {
@@ -35,19 +36,19 @@ public class Comment {
     }
 
     public String getComment() {
-        return content;
+        return comment;
     }
 
     public void setComment(String comment) {
-        this.content = comment;
+        this.comment = comment;
     }
 
-    public Date getCommentedAt() {
-        return commentedAt;
+    public Date getCommentedOn() {
+        return commentedOn;
     }
 
-    public void setCommentedAt(Date commentedAt) {
-        this.commentedAt = commentedAt;
+    public void setCommentedOn(Date commentedOn) {
+        this.commentedOn = commentedOn;
     }
 
     @Override
@@ -55,8 +56,8 @@ public class Comment {
         return "Comment{" +
                 "player='" + player + '\'' +
                 ", game='" + game + '\'' +
-                ", comment='" + content + '\'' +
-                ", commentedAt=" + commentedAt +
+                ", comment='" + comment + '\'' +
+                ", commentedOn=" + commentedOn +
                 '}';
     }
 }

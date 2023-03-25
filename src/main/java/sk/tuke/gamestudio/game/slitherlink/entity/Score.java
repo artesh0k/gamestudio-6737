@@ -3,12 +3,6 @@ package sk.tuke.gamestudio.game.slitherlink.entity;
 import java.util.Date;
 
 public class Score {
-    public Score(String player, String game, int points, Date playedAt) {
-        this.player = player;
-        this.game = game;
-        this.points = points;
-        this.playedAt = playedAt;
-    }
 
     private String player;
 
@@ -16,7 +10,14 @@ public class Score {
 
     private int points;
 
-    private Date playedAt;
+    private Date playedOn;
+
+    public Score(String player, String game, int points, Date playedOn) {
+        this.player = player;
+        this.game = game;
+        this.points = points;
+        this.playedOn = playedOn;
+    }
 
     public String getPlayer() {
         return player;
@@ -42,12 +43,12 @@ public class Score {
         this.points = points;
     }
 
-    public Date getPlayedAt() {
-        return playedAt;
+    public Date getPlayedOn() {
+        return playedOn;
     }
 
-    public void setPlayedAt(Date playedAt) {
-        this.playedAt = playedAt;
+    public void setPlayedOn(Date playedOn) {
+        this.playedOn = playedOn;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class Score {
                 "player='" + player + '\'' +
                 ", game='" + game + '\'' +
                 ", points=" + points +
-                ", playedAt=" + playedAt +
+                ", playedOn=" + playedOn +
                 '}';
     }
 }

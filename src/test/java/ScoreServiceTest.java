@@ -29,7 +29,8 @@ public class ScoreServiceTest {
         assertEquals("slitherlink", scores.get(0).getGame());
         assertEquals("Jaro", scores.get(0).getPlayer());
         assertEquals(100, scores.get(0).getPoints());
-        assertEquals(date, scores.get(0).getPlayedAt());
+        assertEquals(date, scores.get(0).getPlayedOn());
+        scoreService.reset();
     }
 
     @Test
@@ -48,18 +49,18 @@ public class ScoreServiceTest {
         assertEquals("slitherlink", scores.get(0).getGame());
         assertEquals("Katka", scores.get(0).getPlayer());
         assertEquals(150, scores.get(0).getPoints());
-        assertEquals(date, scores.get(0).getPlayedAt());
+        assertEquals(date, scores.get(0).getPlayedOn());
 
         assertEquals("slitherlink", scores.get(1).getGame());
         assertEquals("Jaro", scores.get(1).getPlayer());
         assertEquals(120, scores.get(1).getPoints());
-        assertEquals(date, scores.get(1).getPlayedAt());
+        assertEquals(date, scores.get(1).getPlayedOn());
 
         assertEquals("slitherlink", scores.get(2).getGame());
         assertEquals("Jaro", scores.get(2).getPlayer());
         assertEquals(100, scores.get(2).getPoints());
-        assertEquals(date, scores.get(2).getPlayedAt());
+        assertEquals(date, scores.get(2).getPlayedOn());
+        scoreService.reset();
     }
-
 
 }
