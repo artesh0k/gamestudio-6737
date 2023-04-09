@@ -16,6 +16,9 @@ public class Rating {
     private int rating;
     private Date ratedOn;
 
+    public Rating() {
+    }
+
     public Rating(String player, String game, int rating, Date ratedOn) {
         this.player = player;
         this.game = game;

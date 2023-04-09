@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 public class RatingServiceJPA implements RatingService{
@@ -15,19 +16,20 @@ public class RatingServiceJPA implements RatingService{
 
     @Override
     public void setRating(Rating rating) {
-        int count = (Integer) entityManager.createQuery("select count(r.rating) from Rating r where r.game = :game and r.player = :player")
+
+        var count = entityManager.createQuery("select r.rating from Rating r where r.game = :game and r.player = :player")
                 .setParameter("game", rating.getGame())
                 .setParameter("player", rating.getPlayer())
-                .getSingleResult();
+                .getResultList();
 
-        if(count == 0){
+        if(count.isEmpty()){
 
             entityManager.persist(rating);
             //System.out.println("new rating");
 
         } else {
 
-            entityManager.createQuery("update Rating r set rating = :rating, ratedOn = :ratedOn where player = :player and r.game = :game")
+            entityManager.createNativeQuery("update Rating r set rating = :rating, rated_on = :ratedOn where player = :player and r.game = :game")
                     .setParameter("rating", rating.getRating())
                     .setParameter("ratedOn", rating.getRatedOn())
                     .setParameter("player", rating.getPlayer())
@@ -39,17 +41,28 @@ public class RatingServiceJPA implements RatingService{
 
     @Override
     public int getRating(String player, String game) throws NoResultException{
-        return (Integer) entityManager.createQuery("select r.rating from Rating r where r.player = :player and r.game = :game")
+        var rat = entityManager.createQuery("select r.rating from Rating r where r.player = :player and r.game = :game")
                 .setParameter("player", player)
                 .setParameter("game", game)
-                .getSingleResult();
+                .getResultList();
+        if(rat.isEmpty()){
+            return -1;
+        }
+        return (Integer) rat.get(0);
     }
 
 
     @Override
-    public int getAverageRating(String game) throws NoResultException {
-        return ((Double) entityManager.createQuery("select avg(r.rating) from Rating r where r.game = :game")
-                .setParameter("game", game).getSingleResult()).intValue();
+    public int getAverageRating(String game) throws NoResultException{
+
+        try {
+             return ((Double) entityManager.createQuery("select avg(r.rating) from Rating r where r.game = :game")
+                    .setParameter("game", game)
+                    .getSingleResult()).intValue();
+        } catch (NoResultException nre){
+            throw new GameStudioException("no result exception", nre);
+        }
+
     }
 
     @Override
