@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.game.slitherlink.entity.Score;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreService;
-import sk.tuke.gamestudio.game.slitherlink.service.ScoreServiceJDBS;
+import sk.tuke.gamestudio.entity.Score;
+import sk.tuke.gamestudio.service.ScoreService;
+import sk.tuke.gamestudio.service.ScoreServiceJDBS;
 
 import java.util.Date;
 

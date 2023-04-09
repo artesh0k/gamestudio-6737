@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.game.slitherlink.entity.Comment;
-import sk.tuke.gamestudio.game.slitherlink.service.CommentService;
-import sk.tuke.gamestudio.game.slitherlink.service.CommentServiceJDBS;
+import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.service.CommentService;
+import sk.tuke.gamestudio.service.CommentServiceJDBS;
 
 import java.util.Date;
 

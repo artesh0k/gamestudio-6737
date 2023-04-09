@@ -10,7 +10,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="gamestudio-6737" target="19" />
+      <module name="gamestudio-6737" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gamestudio-6737" options="-parameters" />
+    </option>
   </component>
 </project>

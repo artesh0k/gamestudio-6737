@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.Test;
-import sk.tuke.gamestudio.game.slitherlink.core.elements.*;
-import sk.tuke.gamestudio.game.slitherlink.core.field.Field;
+import sk.tuke.gamestudio.game.slitherlink.elements.Clue;
+import sk.tuke.gamestudio.game.slitherlink.elements.Dot;
+import sk.tuke.gamestudio.game.slitherlink.elements.Line;
+import sk.tuke.gamestudio.game.slitherlink.elements.LineState;
+import sk.tuke.gamestudio.game.slitherlink.field.Field;
 
 
 import java.util.Random;
