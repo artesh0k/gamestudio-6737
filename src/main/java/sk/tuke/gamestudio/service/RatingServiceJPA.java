@@ -41,26 +41,29 @@ public class RatingServiceJPA implements RatingService{
 
     @Override
     public int getRating(String player, String game) throws NoResultException{
-        var rat = entityManager.createQuery("select r.rating from Rating r where r.player = :player and r.game = :game")
-                .setParameter("player", player)
-                .setParameter("game", game)
-                .getResultList();
-        if(rat.isEmpty()){
+        try {
+            return (Integer) entityManager.createQuery("select r.rating from Rating r where r.player = :player and r.game = :game")
+                    .setParameter("player", player)
+                    .setParameter("game", game)
+                    .getSingleResult();
+        } catch (NoResultException nre){
             return -1;
+            //throw new GameStudioException("no result exception", nre);
+
         }
-        return (Integer) rat.get(0);
     }
 
 
     @Override
-    public int getAverageRating(String game) throws NoResultException{
+    public int getAverageRating(String game) throws NullPointerException{
 
         try {
              return ((Double) entityManager.createQuery("select avg(r.rating) from Rating r where r.game = :game")
                     .setParameter("game", game)
                     .getSingleResult()).intValue();
-        } catch (NoResultException nre){
-            throw new GameStudioException("no result exception", nre);
+        } catch (NullPointerException nre){
+            return -1;
+            //throw new GameStudioException("no result exception", nre);
         }
 
     }
