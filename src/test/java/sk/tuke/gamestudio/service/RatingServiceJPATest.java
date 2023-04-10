@@ -1,15 +1,19 @@
+package sk.tuke.gamestudio.service;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.service.RatingService;
-import sk.tuke.gamestudio.service.RatingServiceJDBS;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RatingServiceTest {
+@SpringBootTest
+public class RatingServiceJPATest {
 
-    private final RatingService ratingService = new RatingServiceJDBS();
+    @Autowired
+    private RatingService ratingService;
 
     @Test
     public void resetTest() {

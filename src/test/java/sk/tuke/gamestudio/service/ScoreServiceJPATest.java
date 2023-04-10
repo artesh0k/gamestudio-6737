@@ -1,15 +1,24 @@
+package sk.tuke.gamestudio.service;
+
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import sk.tuke.gamestudio.SpringClient;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.service.ScoreService;
-import sk.tuke.gamestudio.service.ScoreServiceJDBS;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ScoreServiceTest {
+@SpringBootTest
+public class ScoreServiceJPATest {
 
-    private final ScoreService scoreService = new ScoreServiceJDBS();
+    @Autowired
+    private ScoreService scoreService;
 
     @Test
     public void resetTest() {

@@ -11,8 +11,8 @@ public class CommentServiceJDBS implements CommentService{
     public static final String JDBS_USER = "postgres";
     public static final String JDBS_PASSWORD = "pstgrs1232023";
     public static final String DELETE_STATEMENT = "DELETE FROM comment";
-    public static final String INSERT_STATEMENT = "INSERT INTO comment (game, player, comment, commentedOn) VALUES (?, ?, ?, ?)";
-    public static final String SELECT_STATEMENT = "select * from comment where game = ? order by commentedOn desc limit 10";
+    public static final String INSERT_STATEMENT = "INSERT INTO comment (game, player, comment, commented_on) VALUES (?, ?, ?, ?)";
+    public static final String SELECT_STATEMENT = "select * from comment where game = ? order by commented_on desc limit 10";
 
     @Override
     public void addComment(Comment comment) {

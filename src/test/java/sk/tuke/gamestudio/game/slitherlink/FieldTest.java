@@ -1,3 +1,5 @@
+package sk.tuke.gamestudio.game.slitherlink;
+
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.game.slitherlink.elements.Clue;
 import sk.tuke.gamestudio.game.slitherlink.elements.Dot;

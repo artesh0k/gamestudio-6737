@@ -12,7 +12,7 @@ public class ScoreServiceJDBS implements ScoreService{
     public static final String JDBS_USER = "postgres";
     public static final String JDBS_PASSWORD = "pstgrs1232023";
     public static final String DELETE_STATEMENT = "DELETE FROM score";
-    public static final String INSERT_STATEMENT = "INSERT INTO score (game, player, points, playedOn) VALUES (?, ?, ?, ?)";
+    public static final String INSERT_STATEMENT = "INSERT INTO score (game, player, points, played_on) VALUES (?, ?, ?, ?)";
     public static final String SELECT_STATEMENT = "select * from score where game = ? order by points desc limit 10";
 
     @Override

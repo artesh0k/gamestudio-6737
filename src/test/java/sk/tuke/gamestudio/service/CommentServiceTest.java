@@ -1,3 +1,5 @@
+package sk.tuke.gamestudio.service;
+
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.service.CommentService;

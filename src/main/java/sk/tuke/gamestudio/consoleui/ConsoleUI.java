@@ -37,8 +37,6 @@ public class ConsoleUI {
     }
 
     public void play() {
-        System.out.println(ratingService.getRating("julia","slitherlink"));
-        System.out.println(ratingService.getAverageRating("slitherlink"));
         printTopScores();
         printLastComments();
         printRating();
