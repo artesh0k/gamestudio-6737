@@ -18,7 +18,7 @@ public class RatingServiceRest {
         ratingService.setRating(rating);
     }
 
-    //GET -> http://localhost:8080/api/rating/player/slitherlink
+    //GET -> http://localhost:8080/api/rating/slitherlink/player
     @GetMapping("/{game}/{player}")
     public int getRating(@PathVariable String player, @PathVariable String game){
         return ratingService.getRating(player, game);

@@ -231,7 +231,7 @@ public class Field {
     }
 
     public void drawLine(int row, int column) {
-        if (elements[row][column] instanceof Line) {
+        if (elements[row][column] instanceof Line && fieldState == GameState.PLAYING) {
             if (((Line) elements[row][column]).getLineState() == LineState.DRAWN) {
                 ((Line) elements[row][column]).setLineState(LineState.EMPTY);
             } else {
@@ -244,7 +244,7 @@ public class Field {
     }
 
     public void markLine(int row, int column) {
-        if (elements[row][column] instanceof Line) {
+        if (elements[row][column] instanceof Line && fieldState == GameState.PLAYING) {
             if (((Line) elements[row][column]).getLineState() == LineState.MARKED) {
                 ((Line) elements[row][column]).setLineState(LineState.EMPTY);
             } else {
@@ -276,7 +276,7 @@ public class Field {
     }
 
     public int getScore() {
-        int score = (int) (rowCount * columnCount - (System.currentTimeMillis() - startMillis) / 7200);
+        int score = (int) (rowCount * columnCount - (System.currentTimeMillis() - startMillis) / 2000);
         if(fieldState == GameState.SOLVED && score > 0){
             return score;
         } else {

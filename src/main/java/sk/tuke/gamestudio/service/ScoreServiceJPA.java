@@ -20,7 +20,7 @@ public class ScoreServiceJPA implements ScoreService{
 
     @Override
     public List<Score> getTopScores(String game) {
-        return entityManager.createQuery("select s from Score s where s.game = :game order by s.points desc")
+        return entityManager.createNamedQuery("Score.getTopScores")
                 .setParameter("game", game)
                 .setMaxResults(10)
                 .getResultList();
@@ -28,6 +28,6 @@ public class ScoreServiceJPA implements ScoreService{
 
     @Override
     public void reset() {
-        entityManager.createNativeQuery("DELETE FROM score").executeUpdate();
+        entityManager.createNamedQuery("Score.resetScores").executeUpdate();
     }
 }

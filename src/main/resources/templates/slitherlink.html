@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Slither Link</title>
+    <link rel="icon" type="image/x-icon" href="/images/icon.ico">
+</head>
+<body>
+
+<h1>SLITHER LINK</h1>
+
+<div th:replace="fragments::header"/>
+
+<a href="/slitherlink/new">New game</a><br>
+<a href="/slitherlink/mark" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></a><br>
+
+Game state: <span th:text="${@slitherlinkController.getState}"/><br>
+
+<span th:utext="${@slitherlinkController.getHTMLField()}"></span>
+
+<h2>Scores list</h2>
+<ol>
+    <li th:each="score : ${scores}">
+        <span th:text="${score.player}"/>
+        <span th:text="${score.points}"/>
+    </li>
+</ol>
+
+<h2>Scores table on server with thymeleaf</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Player</th>
+        <th>Points</th>
+        <th>Played on</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="score : ${scores}">
+        <td th:text="${score.player}"></td>
+        <td th:text="${score.points}"></td>
+        <td th:text="${score.playedOn}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<form action="/slitherlink/comment" method="post">
+    Comment <input type="text" name="comment" placeholder="Comment"/><br/>
+    <input type="submit">
+</form>
+
+<h2>Comments table on server with thymeleaf</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Player</th>
+        <th>Comment</th>
+        <th>Commented on</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td th:text="${comment.player}"></td>
+        <td th:text="${comment.comment}"></td>
+        <td th:text="${comment.commentedOn}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h1>our rating: <span th:text="${@slitherlinkController.getAverageRating}"/></h1>
+<h2>your rating: <span th:text="${@slitherlinkController.getRating}"/></h2>
+<h3>Rate our game</h3>
+<form action="/slitherlink/rating" method="post">
+    <div>
+        <label>1</label>
+        <input type="radio" name="rating" value="1">
+        <label>2</label>
+        <input type="radio" name="rating" value="2">
+        <label>3</label>
+        <input type="radio" name="rating" value="3">
+        <label>4</label>
+        <input type="radio" name="rating" value="4">
+        <label>5</label>
+        <input type="radio" name="rating" value="5">
+    </div>
+    <input type="submit">
+</form>
+<h2>Scores on client with javascript</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Player</th>
+        <th>Points</th>
+        <th>Played at</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<div th:replace="fragments::footer"/>
+
+</body>
+</html>

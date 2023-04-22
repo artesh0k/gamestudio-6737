@@ -22,6 +22,8 @@ public class RatingServiceJPA implements RatingService{
                 .setParameter("player", rating.getPlayer())
                 .getResultList();
 
+        //var c = getRating(rating.getPlayer(),rating.getGame());
+
         if(count.isEmpty()){
 
             entityManager.persist(rating);
