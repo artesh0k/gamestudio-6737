@@ -2,9 +2,12 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Game studio</title>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+
+  <div th:replace="fragments::header"></div>
 
   <h1>Our favorite games</h1>
   <ol>
@@ -13,7 +16,7 @@
     </li>
   </ol>
 
-  <div th:replace="fragments::header"/>
+  
 
   <form action="/login" method="post">
     Login <input type="text" name="login" placeholder="Login"/><br/>
@@ -21,7 +24,13 @@
     <input type="submit">
   </form>
 
-  <div th:replace="fragments::footer"/>
+  <form action="/register" method="post">
+    Login <input type="text" name="login" placeholder="Login"/><br/>
+    Password <input type="password" name="password" placeholder="Password"/><br/>
+    <input type="submit">
+  </form>
+
+  <div th:replace="fragments::footer"></div>
 
 </body>
 </html>

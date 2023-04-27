@@ -38,13 +38,13 @@ public class SlitherlinkController {
 
     @RequestMapping("/rating")
     public String rating(String rating){
-        ratingService.setRating(new Rating("player", "slitherlink", Integer.parseInt(rating), new Date()));
+        ratingService.setRating(new Rating(userController.getLoggedUser().getLogin(), "slitherlink", Integer.parseInt(rating), new Date()));
         return "redirect:/slitherlink";
     }
 
     @RequestMapping("/comment")
     public String comment(String comment){
-        commentService.addComment(new Comment("player", "slitherlink", comment, new Date()));
+        commentService.addComment(new Comment(userController.getLoggedUser().getLogin(), "slitherlink", comment, new Date()));
         return "redirect:/slitherlink";
     }
 
@@ -87,7 +87,7 @@ public class SlitherlinkController {
         return Integer.toString(ratingService.getAverageRating("slitherlink"));
     }
     public String getRating(){
-        return Integer.toString(ratingService.getRating("player", "slitherlink"));
+        return Integer.toString(ratingService.getRating(userController.getLoggedUser().getLogin(), "slitherlink"));
     }
     public String getState(){
         return field.getFieldState().toString();

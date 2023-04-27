@@ -1,6 +1,7 @@
 package sk.tuke.gamestudio.consoleui;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import sk.tuke.gamestudio.entity.User;
 import sk.tuke.gamestudio.game.slitherlink.elements.Clue;
 import sk.tuke.gamestudio.game.slitherlink.elements.Dot;
 import sk.tuke.gamestudio.game.slitherlink.elements.Line;
@@ -13,6 +14,7 @@ import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.service.CommentService;
 import sk.tuke.gamestudio.service.RatingService;
 import sk.tuke.gamestudio.service.ScoreService;
+import sk.tuke.gamestudio.service.UserService;
 
 import java.util.Date;
 import java.util.List;
@@ -32,11 +34,24 @@ public class ConsoleUI {
     @Autowired
     private RatingService ratingService;
 
+    @Autowired
+    private UserService userService;
+
     public ConsoleUI(Field pole) {
         field = pole;
     }
 
     public void play() {
+        userService.addUser(new User("valerii", "valerii"));
+        userService.addUser(new User("julia", "julia"));
+        System.out.println(userService.isTheSameUser("valerii"));
+        System.out.println(userService.isTheSameUser("julia"));
+        System.out.println(userService.isTheSameUser("valerii1"));
+        System.out.println(userService.isLoginCorrect("valerii", "valerii"));
+        System.out.println(userService.isLoginCorrect("julia", "julia"));
+        System.out.println(userService.isLoginCorrect("valerii", "julia"));
+
+
         printTopScores();
         printLastComments();
         printRating();

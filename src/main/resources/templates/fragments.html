@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <link rel="stylesheet" href="/static/css/style.css">
+<div th:fragment="header" class="header">
+    <ul>
+        <li>
+            <a href="">GAME STUDIO</a>
+        </li>
+        <li>
+            <a href="">login</a>
+        </li>
+    </ul>
 
-<div th:fragment="footer">
-  <hr/>
-  This is gamestudio! Developed at TUKE.
-</div>
 
-<div th:fragment="header">
-    <h1>Welcome to <a href="/">Gamestudio!</a></h1>
+   <!-- <h1>Welcome to <a href="/">Gamestudio!</a></h1>
     <span th:if="${@userController.loggedUser}">
         Logged as: <span th:text="${@userController.loggedUser.login}"/>
         <a href="/logout">Logout</a><br/>
@@ -16,8 +21,12 @@
     <span th:if="not ${@userController.loggedUser}">
         Not logged. Please
         <a href="/">login or register</a>.<br/>
-    </span>
+    </span>-->
 
 </div>
 
+<div th:fragment="footer">
+    <hr/>
+    This is gamestudio!
+</div>
 </html>

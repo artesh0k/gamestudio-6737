@@ -2,27 +2,30 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Slither Link</title>
+    <title>Slither link</title>
     <link rel="icon" type="image/x-icon" href="/images/icon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 
+<div th:replace="fragments::header"></div>
+
 <h1>SLITHER LINK</h1>
 
-<div th:replace="fragments::header"/>
+
 
 <a href="/slitherlink/new">New game</a><br>
 <a href="/slitherlink/mark" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></a><br>
 
-Game state: <span th:text="${@slitherlinkController.getState}"/><br>
+Game state: <span th:text="${@slitherlinkController.getState}"></span><br>
 
 <span th:utext="${@slitherlinkController.getHTMLField()}"></span>
 
 <h2>Scores list</h2>
 <ol>
     <li th:each="score : ${scores}">
-        <span th:text="${score.player}"/>
-        <span th:text="${score.points}"/>
+        <span th:text="${score.player}"></span>
+        <span th:text="${score.points}"></span>
     </li>
 </ol>
 
@@ -44,11 +47,12 @@ Game state: <span th:text="${@slitherlinkController.getState}"/><br>
     </tbody>
 </table>
 
-<form action="/slitherlink/comment" method="post">
-    Comment <input type="text" name="comment" placeholder="Comment"/><br/>
-    <input type="submit">
-</form>
-
+<span th:if="${@userController.loggedUser}">
+    <form action="/slitherlink/comment" method="post">
+        Comment <input type="text" name="comment" placeholder="Comment"/><br/>
+        <input type="submit">
+    </form>
+</span>
 <h2>Comments table on server with thymeleaf</h2>
 <table>
     <thead>
@@ -69,7 +73,9 @@ Game state: <span th:text="${@slitherlinkController.getState}"/><br>
 
 
 <h1>our rating: <span th:text="${@slitherlinkController.getAverageRating}"/></h1>
-<h2>your rating: <span th:text="${@slitherlinkController.getRating}"/></h2>
+<span th:if="${@userController.loggedUser}">
+    <h2>your rating: <span th:text="${@slitherlinkController.getRating}"/></h2>
+
 <h3>Rate our game</h3>
 <form action="/slitherlink/rating" method="post">
     <div>
@@ -86,6 +92,7 @@ Game state: <span th:text="${@slitherlinkController.getState}"/><br>
     </div>
     <input type="submit">
 </form>
+</span>
 <h2>Scores on client with javascript</h2>
 <table>
     <thead>

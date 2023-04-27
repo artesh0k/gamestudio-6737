@@ -49,7 +49,13 @@ public class SpringClient {
 
     @Bean
     public RatingService ratingService(){
-        return new RatingServiceRestClient();}
+        return new RatingServiceRestClient();
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserServiceRestClient();
+    }
 
     @Bean
     public RestTemplate restTemplate() {
