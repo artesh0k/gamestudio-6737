@@ -2,10 +2,12 @@ package sk.tuke.gamestudio.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Rating;
@@ -36,20 +38,14 @@ public class SlitherlinkController {
     private Field field = new Field(3,3,1, 1);
     private boolean marking;
 
-    @RequestMapping("/rating")
-    public String rating(String rating){
-        ratingService.setRating(new Rating(userController.getLoggedUser().getLogin(), "slitherlink", Integer.parseInt(rating), new Date()));
-        return "redirect:/slitherlink";
-    }
-
-    @RequestMapping("/comment")
-    public String comment(String comment){
-        commentService.addComment(new Comment(userController.getLoggedUser().getLogin(), "slitherlink", comment, new Date()));
-        return "redirect:/slitherlink";
-    }
-
     @RequestMapping
     public String slitherlink(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column, Model model){
+        processComand(row, column);
+        fillModel(model);
+        return "slitherlink";
+    }
+
+    private void processComand(Integer row, Integer column) {
         if (row != null && column != null)
             try{
                 if (field.getFieldState() == GameState.PLAYING){
@@ -65,10 +61,22 @@ public class SlitherlinkController {
             } catch (Exception e) {
                 System.out.println("Input is not valid :" + e);
             }
+    }
+
+    private void fillModel(Model model){
         model.addAttribute("scores", scoreService.getTopScores("slitherlink"));
         model.addAttribute("comments", commentService.getComments("slitherlink"));
+    }
+    @RequestMapping("/rating")
+    public String rating(String rating){
+        ratingService.setRating(new Rating(userController.getLoggedUser().getLogin(), "slitherlink", Integer.parseInt(rating), new Date()));
+        return "redirect:/slitherlink";
+    }
 
-        return "slitherlink";
+    @RequestMapping("/comment")
+    public String comment(String comment){
+        commentService.addComment(new Comment(userController.getLoggedUser().getLogin(), "slitherlink", comment, new Date()));
+        return "redirect:/slitherlink";
     }
 
     @RequestMapping("/new")
@@ -81,6 +89,13 @@ public class SlitherlinkController {
     public String changeMarking(){
         marking = !marking;
         return "slitherlink";
+    }
+
+    @RequestMapping(value = "/field", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String slitherlink(@RequestParam(required = false) Integer row, @RequestParam(required = false) Integer column){
+        processComand(row, column);
+        return getHTMLField();
     }
 
     public String getAverageRating(){

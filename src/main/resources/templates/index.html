@@ -3,21 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <title>Game studio</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div th:replace="fragments::header"></div>
+  <div class="f-view">
+    <div th:replace="fragments::header"></div>
 
-  <h1>Our favorite games</h1>
-  <ol>
-    <li>
-      <a href="/slitherlink">Slither Link</a>
-    </li>
-  </ol>
+    <div class="fav-games-view">
+      <h1>Our favorite games</h1>
+      <ol>
+        <li>
+          <a href="/slitherlink">Slither Link</a>
+        </li>
+        <li>
+          <a href="">Minesweeper</a>
+        </li>
+        <li>
+          <a href="">Bejeweled</a>
+        </li>
+        <li>
+          <a href="">Connect four</a>
+        </li>
+        <li>
+          <a href="">Slide-a-Lama</a>
+        </li>
+        <li>
+          <a href="">Picture Sliding Puzzle</a>
+        </li>
+        <li>
+        <a href="">Pexeso</a>
+        </li>
+        <li>
+          <a href="">1024</a>
+        </li>
+        <li>
+          <a href="">Nonogram</a>
+        </li>
+        <li>
+          <a href="">NumberLink</a>
+        </li>
+        <li>
+          <a href="">Logical Mazes</a>
+        </li>
+        <li>
+          <a href="">Labyrint - Maze</a>
+        </li>
+        <li>
+          <a href="">Lights Off</a>
+        </li>
+        <li>
+          <a href="">Dots</a>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+
 
   
-
+<!--
   <form action="/login" method="post">
     Login <input type="text" name="login" placeholder="Login"/><br/>
     Password <input type="password" name="password" placeholder="Password"/><br/>
@@ -28,7 +76,7 @@
     Login <input type="text" name="login" placeholder="Login"/><br/>
     Password <input type="password" name="password" placeholder="Password"/><br/>
     <input type="submit">
-  </form>
+  </form>-->
 
   <div th:replace="fragments::footer"></div>
 

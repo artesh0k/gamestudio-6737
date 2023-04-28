@@ -4,76 +4,152 @@
     <meta charset="UTF-8">
     <title>Slither link</title>
     <link rel="icon" type="image/x-icon" href="/images/icon.ico">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Render score with JavaScript  and jQuery https://jquery.com/ -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $.ajax({
+                url: "/api/score/slitherlink",
+            }).done(function (json) {
+                for (var i = 0; i < json.length; i++) {
+                    var score = json[i];
+                    $("#clientSideScoreTable1 tbody").append($("<tr><td>" + score.player + "<td>" + score.points + "<td>" + score.playedOn + "</tr>"));
+                }
+            });
+        });
+        //]]>
+    </script>
+
+    <!-- Render score with jQuery DataTables  https://datatables.net/ -->
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"/>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $('#clientSideScoreTable2').DataTable({
+                columns: [
+                    {data: "player"},
+                    {data: "points"},
+                    {data: "playedOn"}
+                ],
+                ajax: {url: "/api/score/slitherlink", dataSrc: ''}
+            });
+        });
+        //]]>
+    </script>
+
+    <!-- Render slither link field from web service responding with html  -->
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            refreshSlitherlinkfield("/slitherlink/field");
+        });
+
+        function refreshSlitherlinkfield(url) {
+            $.ajax({
+                url: url,
+            }).done(function (html) {
+                $("#slitherlinkfieldFromService").html(html);
+                //Kedze som nechcel upravit generovnie pola s a href, tak odstranujem atribut href a pridavam click
+                $("#slitherlinkfieldFromService a").each(function () {
+                    const url = $(this).attr("href").replace("/slitherlink", "/slitherlink/field");
+                    $(this).removeAttr("href");
+                    $(this).click(function () {
+                        refreshSlitherlinkfield(url);
+                    });
+                })
+            });
+        }
+        //]]>
+    </script>
+
+
 </head>
 <body>
 
-<div th:replace="fragments::header"></div>
-
-<h1>SLITHER LINK</h1>
 
 
+<div class="f-view">
+    <div th:replace="fragments::header"></div>
 
-<a href="/slitherlink/new">New game</a><br>
-<a href="/slitherlink/mark" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></a><br>
+    <div class="slitherlink-field">
+        <h1>SLITHER LINK</h1>
 
-Game state: <span th:text="${@slitherlinkController.getState}"></span><br>
+        <a href="/slitherlink/new">New game</a>
+        <a href="/slitherlink/mark" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></a>
 
-<span th:utext="${@slitherlinkController.getHTMLField()}"></span>
+        <div>
+            Game state:
+            <span th:text="${@slitherlinkController.getState}"></span>
+        </div>
 
-<h2>Scores list</h2>
-<ol>
-    <li th:each="score : ${scores}">
-        <span th:text="${score.player}"></span>
-        <span th:text="${score.points}"></span>
-    </li>
-</ol>
+        <div class="game-field">
+            <span th:utext="${@slitherlinkController.getHTMLField()}"></span>
+        </div>
 
-<h2>Scores table on server with thymeleaf</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Player</th>
-        <th>Points</th>
-        <th>Played on</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="score : ${scores}">
-        <td th:text="${score.player}"></td>
-        <td th:text="${score.points}"></td>
-        <td th:text="${score.playedOn}"></td>
-    </tr>
-    </tbody>
-</table>
+    </div>
+</div>
+    <h2>Scores list</h2>
+    <ol>
+        <li th:each="score : ${scores}">
+            <span th:text="${score.player}"></span>
+            <span th:text="${score.points}"></span>
+        </li>
+    </ol>
 
-<span th:if="${@userController.loggedUser}">
+    <h2>Scores table on server with thymeleaf</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Points</th>
+            <th>Played on</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="score : ${scores}">
+            <td th:text="${score.player}"></td>
+            <td th:text="${score.points}"></td>
+            <td th:text="${score.playedOn}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <span th:if="${@userController.loggedUser}">
     <form action="/slitherlink/comment" method="post">
         Comment <input type="text" name="comment" placeholder="Comment"/><br/>
         <input type="submit">
     </form>
 </span>
-<h2>Comments table on server with thymeleaf</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Player</th>
-        <th>Comment</th>
-        <th>Commented on</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="comment : ${comments}">
-        <td th:text="${comment.player}"></td>
-        <td th:text="${comment.comment}"></td>
-        <td th:text="${comment.commentedOn}"></td>
-    </tr>
-    </tbody>
-</table>
+    <h2>Comments table on server with thymeleaf</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Comment</th>
+            <th>Commented on</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}">
+            <td th:text="${comment.player}"></td>
+            <td th:text="${comment.comment}"></td>
+            <td th:text="${comment.commentedOn}"></td>
+        </tr>
+        </tbody>
+    </table>
 
 
-<h1>our rating: <span th:text="${@slitherlinkController.getAverageRating}"/></h1>
-<span th:if="${@userController.loggedUser}">
+    <h1>our rating: <span th:text="${@slitherlinkController.getAverageRating}"/></h1>
+    <span th:if="${@userController.loggedUser}">
     <h2>your rating: <span th:text="${@slitherlinkController.getRating}"/></h2>
 
 <h3>Rate our game</h3>
@@ -93,21 +169,60 @@ Game state: <span th:text="${@slitherlinkController.getState}"></span><br>
     <input type="submit">
 </form>
 </span>
-<h2>Scores on client with javascript</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Player</th>
-        <th>Points</th>
-        <th>Played at</th>
-    </tr>
-    </thead>
-    <tbody>
 
-    </tbody>
-</table>
+    <h2>Scores table on server with javascript</h2>
+    <table id="clientSideScoreTable1">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Points</th>
+            <th>Played on</th>
+        </tr>
+        </thead>
+        <tbody>
 
-<div th:replace="fragments::footer"/>
+        </tbody>
+    </table>
+
+    <h2>Scores table on server with javascript 2.0</h2>
+    <table id="clientSideScoreTable2" class="display">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Points</th>
+            <th>Played on</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div onclick="refreshField()">
+        KLIKAJ
+    </div>
+
+    <div id="slitherlinkField">
+        <script type="text/javascript">
+            function refreshField(){
+                $.ajax({
+                    url: "slitherlink/field",
+                }).done(function (html) {
+                    $("#slitherlinkField").html(html)
+                });
+            }
+
+        </script>
+
+    </div>
+
+    <h2>Mine field from service</h2>
+    <div id="slitherlinkfieldFromService">
+    </div>
+
+
+    <div th:replace="fragments::footer"/>
+
 
 </body>
 </html>

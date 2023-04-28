@@ -1,8 +1,204 @@
-body {
-    background-color: #ffffff;
-    font-size: 12px;
-    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Helvetica CE", sans-serif;
-    color: #000000;  
-    margin: 10px;
+
+
+body{
+    margin: 0;
+    overflow: overlay;
 }
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.f-view{
+    height: 100vh;
+    padding: 20px 30px 20px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../images/background.jpeg');
+    background-size: cover;
+    background-position: 50%;
+    position: relative;
+    background-attachment: fixed;
+}
+
+.f-view::after{
+    content: "";
+    background: linear-gradient(#000000, #0c8346);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .60;
+    height: 100%;
+    width: 100%;
+}
+
+header{
+    position: absolute;
+    width: calc(100% - 50px);
+    z-index: 2;
+}
+
+.nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-container{
+    display: flex;
+    align-items: center;
+}
+
+.logo-img{
+    display: flex;
+    height: 80px;
+    align-items: center;
+    margin-right: 8px;
+}
+.logo-container a{
+    color: white;
+    font-family: 'Raleway','Helvetica', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    transition: .25s;
+}
+.logo-container a:hover{
+    color: #0c8346;
+    /*text-shadow: 0 0 10px white;*/
+}
+
+.nav-list{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.nav-list li{
+    color: white;
+    font-family: 'Raleway','Helvetica', sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0  0 0 20px;
+    justify-content: end;
+}
+
+.nav-list-link{
+    position: relative;
+    transition: 0.25s;
+}
+
+.nav-list-link::after{
+    content:"";
+    background-color: #ffffff;
+    height: 3px;
+    width: 100%;
+    border-radius: 20px;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    transform: scaleX(0);
+    transition: 0.25s;
+}
+
+.nav-list-link:hover::after{
+    transform: scaleX(1);
+}
+
+.nav-list-link:hover{
+    color: #0c8346;
+}
+
+.nav-list li:last-child a{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    font-size: 13px;
+    padding: 0 22px;
+    background-color: rgba(12, 131, 70, 0.8);
+    border-radius: 20px;
+    transition: .25s;
+}
+
+.nav-list li:last-child a:hover{
+    background-color: #d05d1c;
+}
+
+.person-icon{
+    margin: 0 6px 0 0;
+    width: 2em;
+}
+
+
+.fav-games-view{
+    margin: auto 0;
+    display: flex;
+    position: relative;
+    z-index: 1;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.fav-games-view h1{
+    color: white;
+    font-family: serif;
+    font-weight: bold;
+    font-size: 150px;
+}
+
+.fav-games-view li{
+    color: white;
+    font-family: serif;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.slitherlink-field{
+    position: relative;
+    z-index: 1;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.game-field{
+    background-color: white;
+    box-shadow: 0 0 20px white;
+}
+
+
+
+
+
+
+
+::-webkit-scrollbar{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track{
+    background: rgba(255, 255, 255, 0);
+    margin-block: 10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgba(12, 131, 70, 0.8);
+    border-radius: 10px;
+    transition: .25s;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: rgba(15, 161, 86, 0.95);
+}
+
+
+
 

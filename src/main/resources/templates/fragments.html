@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-    <link rel="stylesheet" href="/static/css/style.css">
-<div th:fragment="header" class="header">
-    <ul>
-        <li>
-            <a href="">GAME STUDIO</a>
-        </li>
-        <li>
-            <a href="">login</a>
-        </li>
-    </ul>
 
+
+<header th:fragment="header">
+    <nav class="nav">
+        <div class="logo-container">
+            <img class="logo-img" src="/images/header_logo.png" alt="dragon head">
+            <a href="/">GAME STUDIO</a>
+        </div>
+
+        <ul class="nav-list">
+            <li>
+                <a class="nav-list-link" href="">ABOUT US</a>
+            </li>
+            <li>
+                <a class="nav-list-link" href="">CONTACT</a>
+            </li>
+            <li>
+                <a href="">
+                    <svg class="person-icon" style="color: white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"> <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="white"></path> <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" fill="white"></path> </svg>
+                    LOGIN
+                </a>
+            </li>
+        </ul>
+
+    </nav>
+</header>
 
    <!-- <h1>Welcome to <a href="/">Gamestudio!</a></h1>
     <span th:if="${@userController.loggedUser}">
@@ -23,10 +38,10 @@
         <a href="/">login or register</a>.<br/>
     </span>-->
 
-</div>
 
-<div th:fragment="footer">
+
+<footer th:fragment="footer" class="footer">
     <hr/>
     This is gamestudio!
-</div>
+</footer>
 </html>
