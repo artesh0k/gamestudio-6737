@@ -39,6 +39,7 @@ public class GameSolver {
     }
 
     protected boolean isGamePossibleToChange(Element[][] check) {
+
         for (int y = 1; y < rowCount - 1; y += 2) {
             for (int x = 1; x < columnCount - 1; x += 2) {
                 if (((Clue) check[y][x]).getClueState() == ClueState.VISIBLE) {
@@ -46,11 +47,13 @@ public class GameSolver {
                     if (isGameCanBeSolved(check)) {
                         ((Clue) check[y][x]).setClueState(ClueState.VISIBLE);
                         return true;
+
                     }
                     ((Clue) check[y][x]).setClueState(ClueState.VISIBLE);
                 }
             }
         }
+
         return false;
     }
 

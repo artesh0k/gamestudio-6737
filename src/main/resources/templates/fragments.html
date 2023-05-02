@@ -3,9 +3,12 @@
 
 
 <header th:fragment="header">
-    <nav class="nav">
+    <nav class="nav hide">
+
         <div class="logo-container">
-            <img class="logo-img" src="/images/header_logo.png" alt="dragon head">
+            <!-- 3D objsect -->
+            <!-- This inserts the 3D object inside the aside container -->
+            <model-viewer class="logo-img" src="/images/dragoncik2.gltf" alt="dragon head" disable-zoom auto-rotate camera-controls ar></model-viewer>
             <a href="/">GAME STUDIO</a>
         </div>
 
@@ -17,31 +20,161 @@
                 <a class="nav-list-link" href="">CONTACT</a>
             </li>
             <li>
-                <a href="">
+                <button th:styleappend ="${@userController.loggedUser} ? 'display : none' : 'display : flex'" class="log-back-button btn-log">
                     <svg class="person-icon" style="color: white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"> <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="white"></path> <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" fill="white"></path> </svg>
                     LOGIN
-                </a>
+                </button>
+                <button th:styleappend ="${@userController.loggedUser} ? 'display : flex' : 'display : none'" class="log-back-button btn-acc">
+                    <svg class="person-icon" style="color: white" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"> <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" fill="white"></path> <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" fill="white"></path> </svg>
+                    ACCOUNT
+                </button>
             </li>
         </ul>
 
     </nav>
 </header>
 
-   <!-- <h1>Welcome to <a href="/">Gamestudio!</a></h1>
-    <span th:if="${@userController.loggedUser}">
-        Logged as: <span th:text="${@userController.loggedUser.login}"/>
-        <a href="/logout">Logout</a><br/>
-    </span>
+<div th:fragment="account" class="account-view">
+    <div class="account-container">
 
-    <span th:if="not ${@userController.loggedUser}">
-        Not logged. Please
-        <a href="/">login or register</a>.<br/>
-    </span>-->
+        <div class="account-under-container">
+            <div class="avatar-background">
+                <div class="account-avatar">
+                    <model-viewer src="/images/dragoncik2.gltf" alt="dragon head" disable-zoom auto-rotate camera-controls ar></model-viewer>
+                </div>
+            </div>
 
+            <div class="account-data-container">
+                <div class="account-data">
+                    <ul>
+                        <li>
+                            Logged as:
+                        </li>
+                        <li>
+                            <span class="login" th:if="${@userController.loggedUser}" th:text="${@userController.loggedUser.login}"/>
+                        </li>
+                    </ul>
+                </div>
+                <div class="account-data">
+                    <ul>
+                        <li>
+                            Password:
+                        </li>
+                        <li>
+                            <span class="password" th:if="${@userController.loggedUser}" th:text="${@userController.loggedUser.password}"/>
+                        </li>
+                    </ul>
+                </div>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+    <button class="log-back-button btn-back2">BACK</button>
+</div>
 
+<div th:fragment="login" class="login-view">
+    <div class="login-container">
+        <div class="greenBG">
+            <div class="box signin">
+                <h2>Already Have An Account?</h2>
+                <button class="signin-btn">Sign in</button>
+            </div>
+            <div class="box signup">
+                <h2>Still Don't Have An Account?</h2>
+                <button class="signup-btn">Register</button>
+            </div>
+        </div>
+        <div class="form-box">
+            <div class="form signin-form">
 
-<footer th:fragment="footer" class="footer">
-    <hr/>
-    This is gamestudio!
+                <script>
+                    async function signIn() {
+                        let l = document.querySelector('#loginId').value;
+                        let p = document.querySelector('#passwordId').value;
+                        if(l == "" || p == ""){
+                            alert('empty login or password');
+                            return false;
+                        }
+                        const response = await fetch('api/user/'+l+'/'+p);
+                        console.log(response);
+                        const message = await response.json();
+                        console.log(message);
+                        if(message==false){
+                            alert('bad login');
+                            return false;
+                        }
+                        else{
+                            window.location.replace("http://localhost:8080/login?login="+l+"&password="+p);
+                            alert('success');
+                        }
+                    }
+                </script>
+
+                <div class="was-form">
+                    <h3>Sign In</h3>
+                    <input type="text" id="loginId" placeholder="Username" maxlength="20" required/><br/>
+                    <input type="password" id="passwordId" placeholder="Password" maxlength="20" required/><br/>
+                    <button onclick="signIn()">Sign in</button>
+                </div>
+
+            </div>
+            <div class="form signup-form">
+
+                <script>
+                    async function register() {
+                        let l = document.querySelector('#loginId2').value;
+                        let p1 = document.querySelector('#passwordId2').value;
+                        let p2 = document.querySelector('#passwordId3').value;
+                        if(l == "" || p1 == "" || p2 == ""){
+                            alert('empty login or password');
+                            return false;
+                        }
+                        const response = await fetch('api/user/'+l);
+                        console.log(response);
+                        const message = await response.json();
+                        console.log(message);
+                        if(message==true){
+                            alert('login is already used');
+                            return false;
+                        }
+                        else if(p1!=p2){
+                            alert('passwords are not the same');
+                            return false;
+                        }
+                        else{
+                            window.location.replace("http://localhost:8080/register?login="+l+"&password="+p1);
+                            alert('success')
+                        }
+                    }
+                </script>
+                    <div class="was-form">
+                        <h3>Sign Up</h3>
+                        <input type="text" id="loginId2" placeholder="Username" maxlength="20" required/><br/>
+                        <input type="password" id="passwordId2" placeholder="Password" maxlength="20" required/><br/>
+                        <input type="password" id="passwordId3" placeholder="Confirm Password" maxlength="20" required/><br/>
+                        <button onclick="register()">Sign Up</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <button class="log-back-button btn-back1">BACK</button>
+</div>
+
+<footer th:fragment="footer">
+    <div class="footer-content">
+        <h3>Game Studio</h3>
+        <p>thank you for supporting</p>
+        <ul class="socials">
+            <li><a href=""><i class="fa fa-facebook"></i></a></li>
+            <li><a href=""><i class="fa fa-twitter"></i></a></li>
+            <li><a href=""><i class="fa fa-google-plus"></i></a></li>
+            <li><a href=""><i class="fa fa-youtube"></i></a></li>
+            <li><a href=""><i class="fa fa-linkedin-square"></i></a></li>
+        </ul>
+    </div>
+    <div class="footer-bottom">
+        <p>copyright &copy;2023 Game Studio. designed by <span>Valerii Varich</span></p>
+    </div>
 </footer>
+
 </html>

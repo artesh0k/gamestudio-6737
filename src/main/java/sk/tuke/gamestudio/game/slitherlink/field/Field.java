@@ -104,6 +104,7 @@ public class Field {
             }
         }
 
+
         for (int y = 0; y < rowCountOpt; y++) {
             for (int x = 0; x < columnCountOpt; x++) {
                 if (loop[y][x] == 1) {
@@ -212,7 +213,6 @@ public class Field {
 
         Random random = new Random();
         int counter = (int) Math.round(rowCountOpt * columnCountOpt * percentWithoutClues);
-
         while (counter > 0) {
             int row = random.nextInt(rowCountOpt) * 2 + 1;
             int column = random.nextInt(columnCountOpt) * 2 + 1;
@@ -221,6 +221,11 @@ public class Field {
                 if (!gameSolver.isGameCanBeSolved(elements)) {
                     ((Clue) elements[row][column]).setClueState(ClueState.VISIBLE);
                     if (!gameSolver.isGamePossibleToChange(elements)) {
+
+                        if(counter==(int) Math.round(rowCountOpt * columnCountOpt * percentWithoutClues)){
+                            System.out.println("bad--------------------------------------------");
+                            generate();
+                        }
                         break;
                     }
                 } else {
@@ -276,7 +281,7 @@ public class Field {
     }
 
     public int getScore() {
-        int score = (int) (rowCount * columnCount - (System.currentTimeMillis() - startMillis) / 2000);
+        int score = (int) (rowCount * columnCount - (System.currentTimeMillis() - startMillis) / 2500);
         if(fieldState == GameState.SOLVED && score > 0){
             return score;
         } else {

@@ -5,46 +5,20 @@
     <title>Slither link</title>
     <link rel="icon" type="image/x-icon" href="/images/icon.ico">
     <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--Imports a model-viewer JavaScript code -->
+    <!--It helps to handle how the 3D Object would be displayed -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Render score with JavaScript  and jQuery https://jquery.com/ -->
     <script src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function () {
-            $.ajax({
-                url: "/api/score/slitherlink",
-            }).done(function (json) {
-                for (var i = 0; i < json.length; i++) {
-                    var score = json[i];
-                    $("#clientSideScoreTable1 tbody").append($("<tr><td>" + score.player + "<td>" + score.points + "<td>" + score.playedOn + "</tr>"));
-                }
-            });
-        });
-        //]]>
-    </script>
-
-    <!-- Render score with jQuery DataTables  https://datatables.net/ -->
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"/>
-
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function () {
-            $('#clientSideScoreTable2').DataTable({
-                columns: [
-                    {data: "player"},
-                    {data: "points"},
-                    {data: "playedOn"}
-                ],
-                ajax: {url: "/api/score/slitherlink", dataSrc: ''}
-            });
-        });
-        //]]>
-    </script>
 
     <!-- Render slither link field from web service responding with html  -->
     <script type="text/javascript">
@@ -72,157 +46,285 @@
     </script>
 
 
+    <!-- Render slither link field from web service responding with html  -->
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            refreshComments("/slitherlink/comment/HTML");
+        });
+
+        function refreshComments(url) {
+
+            console.log(url);
+            if(document.querySelector('#comment-id') && document.querySelector('#comment-id').value != ""){
+
+                let c = document.querySelector('#comment-id');
+                url = url+'?comment='+c.value;
+                console.log(url);
+            }
+            $.ajax({
+                url: url,
+            }).done(function (html) {
+                $("#commentsFromService").html(html);
+            });
+        }
+
+        async function refreshComments1(url) {
+
+            const response = await fetch('/api/isLoggedUser');
+            console.log(response);
+            const message = await response.json();
+            console.log(message);
+            if(message==false){
+                alert('please login to write a comment');
+                return false;
+            }
+            console.log(url);
+            if(document.querySelector('#comment-id') && document.querySelector('#comment-id').value != ""){
+
+                let c = document.querySelector('#comment-id');
+                url = url+'?comment='+c.value;
+                console.log(url);
+            }
+            $.ajax({
+                url: url,
+            }).done(function (html) {
+                $("#commentsFromService").html(html);
+            });
+        }
+        //]]>
+    </script>
+
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            drawOrMark();
+        });
+
+        async function drawOrMark() {
+            let mOrDBtn = document.querySelector('#markOrDraw');
+            const response = await fetch('slitherlink/api/isMarking');
+            console.log(response);
+            const message = await response.json();
+            console.log(message);
+            if(message==true){
+                mOrDBtn.textContent='Change to Draw';
+            }
+            else{
+                mOrDBtn.textContent='Change to Mark';
+            }
+        }
+
+        async function drawOrMark1() {
+
+            fetch('slitherlink/mark', {
+                method: 'POST'
+            })
+                .then(response => {
+                    console.log('Variable changed successfully');
+                })
+                .catch(error => {
+                    console.error('Failed to change variable:', error);
+                });
+            let mOrDBtn = document.querySelector('#markOrDraw');
+            const response = await fetch('slitherlink/api/isMarking');
+            console.log(response);
+            const message = await response.json();
+            console.log(message);
+            if(message==true){
+                mOrDBtn.textContent='Change to Draw';
+            }
+            else{
+                mOrDBtn.textContent='Change to Mark';
+            }
+        }
+
+        //]]>
+    </script>
+
+
 </head>
 <body>
 
-
-
+    <div th:replace="fragments::account"></div>
+    <div th:replace="fragments::login"></div>
 <div class="f-view">
     <div th:replace="fragments::header"></div>
 
-    <div class="slitherlink-field">
-        <h1>SLITHER LINK</h1>
+    <div class="common-field">
 
-        <a href="/slitherlink/new">New game</a>
-        <a href="/slitherlink/mark" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></a>
+        <div class="slitherlink-field">
+            <div class="game-field">
+                <h1>SLITHER LINK</h1>
+                <form action="/slitherlink">
 
-        <div>
-            Game state:
-            <span th:text="${@slitherlinkController.getState}"></span>
+                    <div class="game-field-1" id="slitherlinkfieldFromService"></div>
+                    <div class="rules-button">
+                        <span>Rules. Slitherlink is played on a rectangular lattice of dots.<br>
+                            Some of the squares formed by the dots have numbers inside them.<br>
+                            The objective is to connect horizontally and vertically adjacent<br>
+                            dots so that the lines form a simple loop with no loose ends.</span>
+                        <button type="submit" class="log-back-button">Check</button>
+                    </div>
+
+                </form>
+                <div class="under-slitherlink-field">
+
+                    <a href="/slitherlink/new" class="log-back-button">New game</a>
+
+                    <!--<button href="/slitherlink/mark" id="markOrDraw" class="log-back-button" th:text="${'Change to ' + (@slitherlinkController.marking ? 'Draw' : 'Mark')}"></button>
+                    -->
+                    <button onclick="drawOrMark1()" id="markOrDraw" class="log-back-button"></button>
+
+                    <div class="game-state">
+                        Game state: <span th:text="${@slitherlinkController.getState}"></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="game-field">
-            <span th:utext="${@slitherlinkController.getHTMLField()}"></span>
-        </div>
+        <div class="comment-rating-field">
+            <div class="rating-field">
+                <div class="game-rating">
+                    <h3>Our rating: </h3>
+                    <span th:if="${@slitherlinkController.getAverageRating}>=1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getAverageRating}>=2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getAverageRating}>=3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getAverageRating}>=4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getAverageRating}>=5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                </div>
 
+
+                <div class = "game-rating" th:if="${@userController.loggedUser}">
+                    <h3>Your rating: </h3>
+                    <span th:if="${@slitherlinkController.getRating}>=1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getRating}>=2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getRating}>=3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getRating}>=4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                    <span th:if="${@slitherlinkController.getRating}>=5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                    </span>
+                </div>
+
+
+                <script>
+                    async function rate() {
+
+                        const radioButtons = document.getElementsByName('rating');
+                        let isChecked = false;
+                        let r = 0;
+                        for (let i = 0; i < radioButtons.length; i++) {
+                            if (radioButtons[i].checked) {
+                                isChecked = true;
+                                r = radioButtons[i].value;
+                                break;
+                            }
+                        }
+
+                        if (!isChecked) {
+                            alert('Please select a radio button!');
+                            return false;
+                        }
+
+                        const response = await fetch('/api/isLoggedUser');
+                        console.log(response);
+                        const message = await response.json();
+                        console.log(message);
+                        if(message==false){
+                            alert('please login to rate the game');
+                            return false;
+                        }
+                        window.location.replace("http://localhost:8080/slitherlink/rating?rating="+r);
+                    }
+                </script>
+
+                <div class="rating-field-form">
+                    <div class="rate-our-game">
+                        <h2>Rate our game</h2>
+                        <div class="rate-inputs">
+                            <input type="radio" name="rating" value="5">
+                            <input type="radio" name="rating" value="4">
+                            <input type="radio" name="rating" value="3">
+                            <input type="radio" name="rating" value="2">
+                            <input type="radio" name="rating" value="1">
+                        </div>
+                        <button class ="log-back-button" onclick="rate()">Rate</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="comment-field">
+                <h2>Comments</h2>
+
+                <div class="comment-field-order-list" id="commentsFromService">
+                </div>
+
+                <div class="comment-field-form">
+                    <input type="text" id = "comment-id" placeholder="Write a comment" required maxlength="20">
+                    <input class ="send-btn" type="button" value="Send" onclick="refreshComments1('/slitherlink/comment/HTML')" formmethod="post">
+                </div>
+
+            </div>
+
+
+        </div>
     </div>
 </div>
-    <h2>Scores list</h2>
-    <ol>
-        <li th:each="score : ${scores}">
-            <span th:text="${score.player}"></span>
-            <span th:text="${score.points}"></span>
-        </li>
-    </ol>
 
-    <h2>Scores table on server with thymeleaf</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Player</th>
-            <th>Points</th>
-            <th>Played on</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="score : ${scores}">
-            <td th:text="${score.player}"></td>
-            <td th:text="${score.points}"></td>
-            <td th:text="${score.playedOn}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="s-view-slitherlink">
+        <h2>Scores list</h2>
+        <div class="scores-list">
+            <ol>
+                <li th:each="score : ${scores}">
+                    <span th:text="${score.points}"></span>
+                    <span th:text="${score.player}"></span>
+                </li>
+            </ol>
+        </div>
 
-    <span th:if="${@userController.loggedUser}">
-    <form action="/slitherlink/comment" method="post">
-        Comment <input type="text" name="comment" placeholder="Comment"/><br/>
-        <input type="submit">
-    </form>
-</span>
-    <h2>Comments table on server with thymeleaf</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Player</th>
-            <th>Comment</th>
-            <th>Commented on</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="comment : ${comments}">
-            <td th:text="${comment.player}"></td>
-            <td th:text="${comment.comment}"></td>
-            <td th:text="${comment.commentedOn}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-
-    <h1>our rating: <span th:text="${@slitherlinkController.getAverageRating}"/></h1>
-    <span th:if="${@userController.loggedUser}">
-    <h2>your rating: <span th:text="${@slitherlinkController.getRating}"/></h2>
-
-<h3>Rate our game</h3>
-<form action="/slitherlink/rating" method="post">
-    <div>
-        <label>1</label>
-        <input type="radio" name="rating" value="1">
-        <label>2</label>
-        <input type="radio" name="rating" value="2">
-        <label>3</label>
-        <input type="radio" name="rating" value="3">
-        <label>4</label>
-        <input type="radio" name="rating" value="4">
-        <label>5</label>
-        <input type="radio" name="rating" value="5">
-    </div>
-    <input type="submit">
-</form>
-</span>
-
-    <h2>Scores table on server with javascript</h2>
-    <table id="clientSideScoreTable1">
-        <thead>
-        <tr>
-            <th>Player</th>
-            <th>Points</th>
-            <th>Played on</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
-
-    <h2>Scores table on server with javascript 2.0</h2>
-    <table id="clientSideScoreTable2" class="display">
-        <thead>
-        <tr>
-            <th>Player</th>
-            <th>Points</th>
-            <th>Played on</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
-
-    <div onclick="refreshField()">
-        KLIKAJ
-    </div>
-
-    <div id="slitherlinkField">
-        <script type="text/javascript">
-            function refreshField(){
-                $.ajax({
-                    url: "slitherlink/field",
-                }).done(function (html) {
-                    $("#slitherlinkField").html(html)
-                });
-            }
-
-        </script>
-
-    </div>
-
-    <h2>Mine field from service</h2>
-    <div id="slitherlinkfieldFromService">
     </div>
 
 
     <div th:replace="fragments::footer"/>
-
-
+    <script th:inline="javascript" src="/sandboxAnimation2.js"></script>
 </body>
 </html>
