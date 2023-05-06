@@ -71,7 +71,6 @@ public class SlitherlinkController {
 
     private void fillModel(Model model){
         model.addAttribute("scores", scoreService.getTopScores("slitherlink"));
-        model.addAttribute("comments", commentService.getComments("slitherlink"));
     }
     @RequestMapping("/rating")
     public String rating(@RequestParam String rating){
