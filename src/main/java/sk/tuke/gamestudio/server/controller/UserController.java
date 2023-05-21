@@ -53,7 +53,7 @@ public class UserController {
         return loggedUser;
     }
 
-    @GetMapping("/api/isLoggedUser")
+    @GetMapping("/isLoggedUser")
     @ResponseBody
     public boolean isLoggedUser() {
         return loggedUser != null;

@@ -130,6 +130,7 @@ header{
 
 
 .log-back-button{
+    margin: 0 8px;
     color: white;
     font-family: 'Raleway','Helvetica', sans-serif;
     font-weight: bold;
@@ -478,10 +479,11 @@ header{
 
 .game-field form{
     display: flex;
-    margin-bottom: 30px;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
+
 
 .rules-button{
     display: flex;
@@ -489,10 +491,10 @@ header{
 }
 
 .rules-button span{
-    padding:  0 20px;
+    padding: 20px 20px;
 }
 
-.game-field-1{
+.game-field-1 table{
     border-radius: 20px;
     background: black;
     box-shadow: 0 0 90px rgba(0, 0, 0, 0.51);
@@ -503,7 +505,10 @@ header{
     width: 30px;
     height: 30px;
 }
-
+.field-settings{
+    display: flex;
+    flex-direction: column;
+}
 .under-slitherlink-field{
     display: flex;
     align-items: center;
@@ -517,6 +522,10 @@ header{
 
 .game-state{
     margin: 0 30px;
+}
+
+.game-state span{
+    color: #ff7224;
 }
 
 .comment-rating-field{
@@ -726,7 +735,7 @@ header{
 .scores-list li{
     display: flex;
     justify-content: space-between;
-    width: 180px;
+    width: 320px;
     padding: 10px 60px;
     margin: 5px 0;
     transition: .5s;
@@ -765,8 +774,8 @@ header{
 
 .scores-list li:hover{
     background: rgba(15, 161, 86, 0.95);
-    box-shadow: 0 0 20px white;
-    width: 320px;
+    box-shadow: 0 0 20px #ff7224;
+    width: 230px;
 }
 
 footer{

@@ -39,6 +39,8 @@ public class SlitherlinkController {
     private Field field = new Field(4,4,1, 1);
     private boolean marking;
 
+    private boolean addedScore = false;
+
 
     public void ChangeField(int rowCount, int columnCount){
         field = new Field(rowCount, columnCount, 1, 1);
@@ -60,8 +62,10 @@ public class SlitherlinkController {
                         field.markLine(row, column);
                     else
                         field.drawLine(row, column);
-                    if(field.getFieldState() == GameState.SOLVED && userController.isLoggedUser())
+                    if(field.getFieldState() == GameState.SOLVED && userController.isLoggedUser() && !addedScore){
                         scoreService.addScore(new Score(userController.getLoggedUser().getLogin(), "slitherlink", field.getScore(), new Date()));
+                        addedScore = true;
+                    }
                 }
 
             } catch (Exception e) {
@@ -97,11 +101,12 @@ public class SlitherlinkController {
         return getHTMLComments();
     }
 
-
-    @RequestMapping("/new")
-    public String newGame(){
-        field = new Field(4,4,1, 1);
-        return "redirect:/slitherlink";
+    @RequestMapping(value = "/new", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String newGame(@RequestParam Integer rowCount, @RequestParam Integer columnCount){
+        addedScore = false;
+        field = new Field(rowCount,columnCount,1, 1);
+        return getHTMLField();
     }
 
     @PostMapping("/mark")
@@ -126,16 +131,54 @@ public class SlitherlinkController {
         }
         return "0";
     }
-    public String getState(){
-        return field.getFieldState().toString();
+    @GetMapping("/isSolved")
+    @ResponseBody
+    public boolean isSolved(){
+        return field.getFieldState() == GameState.SOLVED;
     }
 
-    @GetMapping("/api/isMarking")
+    @GetMapping("/isMarking")
     @ResponseBody
     public boolean isMarking() {
         return marking;
     }
 
+    @RequestMapping(value = "/score/HTML", produces = MediaType.TEXT_HTML_VALUE)
+    @ResponseBody
+    public String scoreHTML(){
+        return getHTMLScores();
+    }
+    public String getHTMLScores(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<ol>\n");
+        List<Score> scores = scoreService.getTopScores("slitherlink");
+        for(Score i : scores){
+            sb.append("<li>\n");
+            sb.append("<span>"+i.getPlayer()+": "+"</span>\n");
+            sb.append("<span>"+i.getPoints()+"</span>\n");
+            Date date1 = i.getPlayedOn();
+            Date date2 = new Date();
+            long diffInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+            long diffInSeconds = diffInMilliseconds / 1000;
+            long diffInMinutes = diffInSeconds / 60;
+            long diffInHours = diffInMinutes / 60;
+            long diffInDays = diffInHours / 24;
+
+            if(diffInSeconds<60){
+                sb.append("<span>"+diffInSeconds+" seconds ago</span>\n");
+            } else if (diffInMinutes<60) {
+                sb.append("<span>"+diffInMinutes+" minutes ago</span>\n");
+            } else if (diffInHours<24) {
+                sb.append("<span>"+diffInHours+" hours ago</span>\n");
+            } else {
+                sb.append("<span>"+diffInDays+" days ago</span>\n");
+            }
+
+            sb.append("</li>\n");
+        }
+        sb.append("</ol>\n");
+        return sb.toString();
+    }
     public String getHTMLComments(){
         StringBuilder sb = new StringBuilder();
         sb.append("<ol>\n");
@@ -167,7 +210,6 @@ public class SlitherlinkController {
         sb.append("</ol>\n");
         return sb.toString();
     }
-
     public String getHTMLField(){
 
         StringBuilder sb = new StringBuilder();

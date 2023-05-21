@@ -25,9 +25,11 @@
         //<![CDATA[
         $(document).ready(function () {
             refreshSlitherlinkfield("/slitherlink/field");
+            refreshScores("/slitherlink/score/HTML");
         });
 
-        function refreshSlitherlinkfield(url) {
+        async function refreshSlitherlinkfield(url) {
+
             $.ajax({
                 url: url,
             }).done(function (html) {
@@ -41,7 +43,66 @@
                     });
                 })
             });
+            let gameState = document.querySelector('#gameState');
+
+            const response = await fetch('/slitherlink/isSolved');
+            console.log(response);
+            const message = await response.json();
+            console.log(message);
+            if(message==false){
+                gameState.textContent='PLAYING';
+            }
+            else{
+                gameState.textContent='SOLVED';
+                refreshScores("/slitherlink/score/HTML");
+            }
         }
+
+        async function newField(url) {
+            let rc = document.querySelector('#sizeOfFieldRow');
+            let cc = document.querySelector('#sizeOfFieldColumn');
+            url = url+'?rowCount='+rc.value+'&columnCount='+cc.value;
+            console.log(url);
+
+            $.ajax({
+                url: url,
+            }).done(function (html) {
+                $("#slitherlinkfieldFromService").html(html);
+                //Kedze som nechcel upravit generovnie pola s a href, tak odstranujem atribut href a pridavam click
+                $("#slitherlinkfieldFromService a").each(function () {
+                    const url = $(this).attr("href").replace("/slitherlink", "/slitherlink/field");
+                    $(this).removeAttr("href");
+                    $(this).click(function () {
+                        refreshSlitherlinkfield(url);
+                    });
+                })
+            });
+
+            let firstView = document.querySelector('.f-view');
+            firstView.style.height = (100+rc.value*6).toString() + "vh";
+
+            const response = await fetch('/slitherlink/isSolved');
+            console.log(response);
+            const message = await response.json();
+            console.log(message);
+            if(message==false){
+                gameState.textContent='PLAYING';
+            }
+            else{
+                gameState.textContent='SOLVED';
+            }
+
+        }
+
+        function refreshScores(url) {
+            console.log(url);
+            $.ajax({
+                url: url,
+            }).done(function (html) {
+                $("#scoresFromService").html(html);
+            });
+        }
+
         //]]>
     </script>
 
@@ -71,7 +132,7 @@
 
         async function refreshComments1(url) {
 
-            const response = await fetch('/api/isLoggedUser');
+            const response = await fetch('/isLoggedUser');
             console.log(response);
             const message = await response.json();
             console.log(message);
@@ -95,7 +156,6 @@
         //]]>
     </script>
 
-
     <script type="text/javascript">
         //<![CDATA[
         $(document).ready(function () {
@@ -104,7 +164,7 @@
 
         async function drawOrMark() {
             let mOrDBtn = document.querySelector('#markOrDraw');
-            const response = await fetch('slitherlink/api/isMarking');
+            const response = await fetch('slitherlink/isMarking');
             console.log(response);
             const message = await response.json();
             console.log(message);
@@ -120,15 +180,14 @@
 
             fetch('slitherlink/mark', {
                 method: 'POST'
-            })
-                .then(response => {
+            }).then(response => {
                     console.log('Variable changed successfully');
                 })
                 .catch(error => {
                     console.error('Failed to change variable:', error);
                 });
             let mOrDBtn = document.querySelector('#markOrDraw');
-            const response = await fetch('slitherlink/api/isMarking');
+            const response = await fetch('slitherlink/isMarking');
             console.log(response);
             const message = await response.json();
             console.log(message);
@@ -157,26 +216,31 @@
         <div class="slitherlink-field">
             <div class="game-field">
                 <h1>SLITHER LINK</h1>
-                <form action="/slitherlink">
-
+                <!--<form action="/slitherlink">-->
+                <form>
                     <div class="game-field-1" id="slitherlinkfieldFromService"></div>
                     <div class="rules-button">
-                        <span>Rules. Slitherlink is played on a rectangular lattice of dots.<br>
+                        <span>Rules: Slitherlink is played on a rectangular lattice of dots.<br>
                             Some of the squares formed by the dots have numbers inside them.<br>
                             The objective is to connect horizontally and vertically adjacent<br>
                             dots so that the lines form a simple loop with no loose ends.</span>
-                        <button type="submit" class="log-back-button">Check</button>
+                        <!--<button type="submit" class="log-back-button">Check</button>-->
+                        <div class="field-settings">
+                            row <input id="sizeOfFieldRow" type="range" min="3" max="9" value="4">
+                            column <input id="sizeOfFieldColumn" type="range" min="3" max="9" value="4">
+                        </div>
+
                     </div>
 
                 </form>
                 <div class="under-slitherlink-field">
 
-                    <a href="/slitherlink/new" class="log-back-button">New game</a>
-
+                    <button onclick="newField('slitherlink/new')" class="log-back-button">New game</button>
                     <button onclick="drawOrMark1()" id="markOrDraw" class="log-back-button"></button>
 
                     <div class="game-state">
-                        Game state: <span th:text="${@slitherlinkController.getState}"></span>
+                        <!--Game state: <span th:text="${@slitherlinkController.getState}"></span>-->
+                        Game state: <span id="gameState"></span>
                     </div>
                 </div>
             </div>
@@ -263,7 +327,7 @@
                             return false;
                         }
 
-                        const response = await fetch('/api/isLoggedUser');
+                        const response = await fetch('/isLoggedUser');
                         console.log(response);
                         const message = await response.json();
                         console.log(message);
@@ -310,13 +374,13 @@
 
     <div class="s-view-slitherlink">
         <h2>Scores list</h2>
-        <div class="scores-list">
-            <ol>
+        <div class="scores-list" id="scoresFromService">
+           <!-- <ol>
                 <li th:each="score : ${scores}">
                     <span th:text="${score.points}"></span>
                     <span th:text="${score.player}"></span>
                 </li>
-            </ol>
+            </ol>-->
         </div>
 
     </div>
